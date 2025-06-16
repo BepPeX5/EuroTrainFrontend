@@ -1,0 +1,36 @@
+<!-- search-train.html -->
+<div class="search-train-container">
+  <header class="search-header">
+    <img src="assets/logo.png" alt="Logo" class="logo">
+  </header>
+
+  <div class="search-box">
+    <div class="input-group">
+      <label for="partenze">Partenza</label>
+      <select [(ngModel)]="selectedPartenza" (change)="onPartenzaChange()">
+        <option [ngValue]="null" disabled selected>Seleziona stazione di partenza</option>
+        <option *ngFor="let p of partenze" [value]="p">{{ p }}</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="destinazione">Destinazione</label>
+      <select [(ngModel)]="selectedDestinazione" (change)="onDestinazioneChange()" [disabled]="!selectedPartenza">
+        <option [ngValue]="null" disabled selected>Seleziona stazione di arrivo</option>
+        <option *ngFor="let d of destinazioni" [value]="d">{{ d }}</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="data">Data</label>
+      <input type="date" [(ngModel)]="selectedData" [min]="today()" [disabled]="isLoadingDate || (!selectedPartenza && !selectedDestinazione)"
+             [ngModelOptions]="{ standalone: true }"
+             [attr.max]="'2100-12-31'"
+             [attr.placeholder]="'Seleziona data'"
+             [attr.disabledDates]="dateDisponibili"
+             [attr.dateFilter]="dateFilter">
+    </div>
+
+    <button class="search-button" [disabled]="!isSearchEnabled()" (click)="onCerca()">CERCA</button>
+  </div>
+</div>

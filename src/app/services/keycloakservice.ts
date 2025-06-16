@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import Keycloak from "keycloak-js";
-import { HttpClient } from '@angular/common/http';
 import { Router } from "@angular/router";
 
 export interface UserProfile {
@@ -19,19 +18,20 @@ export class KeycloakService {
   private get keycloak() {
     if (!this._keycloak) {
       this._keycloak = new Keycloak({
-        url: "http://localhost:8080",
-        realm: "eurotrain",
-        clientId: "frontend-treni"
+        url: "http://localhost:8080",              // Keycloak URL
+        realm: "eurotrain",                        // Nome del realm
+        clientId: "backend-treni"                  // Client ID usato sia da frontend che backend
       });
     }
     return this._keycloak;
   }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private router: Router) {}
 
+  // Inizializza senza forzare login all'apertura sito
   async init(): Promise<boolean> {
     const authenticated = await this.keycloak.init({
-      onLoad: 'check-sso', // NON forza il login all'avvio
+      onLoad: 'check-sso',   // NON forza login subito
       checkLoginIframe: false,
       silentCheckSsoRedirectUri: 'http://localhost:4200/assets/silent-check-sso.html'
     });
@@ -39,9 +39,8 @@ export class KeycloakService {
     if (authenticated) {
       this.profile = await this.keycloak.loadUserInfo() as unknown as UserProfile;
       this.profile.token = this.keycloak.token || '';
-      await this.registerUser();
 
-      // Redirezione solo se si accede da bottone Admin (non forzata all'avvio)
+      // Redireziona in base al ruolo se loggato
       if (this.hasRole('Admin')) {
         this.router.navigate(['/admin']);
       } else {
@@ -52,47 +51,44 @@ export class KeycloakService {
     return authenticated;
   }
 
+  // Login volontario per admin (es. clic da bottone)
   loginAsAdmin() {
-    this.keycloak.login({ redirectUri: 'http://localhost:4200/admin-login-callback' });
+    this.keycloak.login({
+      redirectUri: 'http://localhost:4200/admin-login-callback'
+    });
   }
 
+  // Login volontario per utente (es. clic da Prenota)
   loginUtente() {
-    this.keycloak.login({ redirectUri: 'http://localhost:4200/prenota' });
+    this.keycloak.login({
+      redirectUri: 'http://localhost:4200/prenota'
+    });
   }
 
-  private async registerUser() {
-    if (this.profile) {
-      const userDto = {
-        email: this.profile.email ?? '',
-        firstName: this.profile.given_name ?? '',
-        lastName: this.profile.family_name ?? '',
-      };
-
-      await this.http.post('http://localhost:8081/api/clienti/register', userDto, {
-        headers: {
-          'Authorization': `Bearer ${this.getToken()}`
-        }
-      }).toPromise();
-    }
-  }
-
+  // Restituisce token corrente
   getToken(): string {
     return this.keycloak.token || '';
   }
 
+  // Aggiorna token JWT se sta per scadere
   async updateToken() {
     await this.keycloak.updateToken(30);
   }
 
+  // Ruoli dell'utente (es. Admin o user)
   getUserClientRoles(): string[] {
-    return this.keycloak.resourceAccess?.['frontend-treni']?.roles || [];
+    return this.keycloak.resourceAccess?.['backend-treni']?.roles || [];
   }
 
+  // Verifica se ha un certo ruolo
   hasRole(role: string): boolean {
     return this.getUserClientRoles().includes(role);
   }
 
+  // Logout con redirect a home
   logout() {
-    this.keycloak.logout({ redirectUri: "http://localhost:4200" });
+    this.keycloak.logout({
+      redirectUri: "http://localhost:4200"
+    });
   }
 }

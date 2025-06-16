@@ -1,0 +1,78 @@
+/* search-train.component.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.search-header {
+  width: 100%;
+  padding: 1rem;
+  background-color: #1c425e;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logo {
+  height: 50px;
+}
+
+.search-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-weight: bold;
+  color: #1c425e;
+  margin-bottom: 0.5rem;
+}
+
+.input-group select,
+.input-group input[type='date'] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-button {
+  grid-column: span 2;
+  padding: 0.75rem;
+  font-size: 1.2rem;
+  color: #1c425e;
+  background-color: #fed544;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.search-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.search-button:hover:not(:disabled) {
+  background-color: #f3c938;
+}

@@ -11,7 +11,7 @@ export class Stazioneservice {
 
   constructor(private http: HttpClient) {}
 
-  caricaStazioniPartenza(): Observable<String[]>{
+  caricaStazioniPartenza(): Observable<string[]>{
     return this.http.get<string[]>(`${this.baseUrl}/partenze`);
   }
 
