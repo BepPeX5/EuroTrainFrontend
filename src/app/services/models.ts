@@ -36,7 +36,7 @@ export interface Viaggio {
   id: number;
   treno: Treno;
   stazionePartenza: Stazione;
-  stazioneArrivo: Stazione;
+  stazioneDestinazione: Stazione;
   dataPartenza: string; // Formato: YYYY-MM-DD
   orarioPartenza: string;  // Formato: HH:mm
   disponibilitaPosti: number;

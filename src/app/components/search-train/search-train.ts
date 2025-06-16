@@ -30,9 +30,11 @@ export class SearchComponent implements OnInit {
     private stazioneService: Stazioneservice,
     private viaggioService: Viaggioservice,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
+    this.startSlideshow()
     this.stazioneService.caricaStazioniPartenza().subscribe({
       next: (data: string[]) => this.partenze = data,
       error: (err) => console.error('Errore nel caricamento delle partenze:', err)
@@ -108,7 +110,7 @@ export class SearchComponent implements OnInit {
   }
 
   navigateToResults(viaggi: Viaggio[]): void {
-    this.router.navigate(['/results'], { state: { viaggi } });
+    this.router.navigate(['/results'], {state: {viaggi}});
   }
 
   today(): string {
@@ -118,5 +120,24 @@ export class SearchComponent implements OnInit {
     const dd = String(now.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
+
+  startSlideshow(): void {
+    const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
+    let index = 0;
+    if (images.length === 0) return;
+
+    images[0].classList.add('active');
+
+    setInterval(() => {
+      images[index].classList.remove('active');
+      index = (index + 1) % images.length;
+      images[index].classList.add('active');
+    }, 20000); // cambia immagine ogni 8s
+  }
+
+  goToAdminLogin(): void {
+    this.router.navigate(['/admin']);
+  }
+
 }
 
