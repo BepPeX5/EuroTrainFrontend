@@ -1,13 +1,14 @@
-<!-- search-train.html -->
-<div class="search-train-container">
+<div class="app-search-train-container">
   <header class="search-header">
-    <img src="assets/logo.png" alt="Logo" class="logo">
+    <div class="logo-container">
+      <img src="/assets/logo.png" alt="Logo" class="logo">
+    </div>
   </header>
 
   <div class="search-box">
     <div class="input-group">
       <label for="partenze">Partenza</label>
-      <select [(ngModel)]="selectedPartenza" (change)="onPartenzaChange()">
+      <select id="partenze" [(ngModel)]="selectedPartenza" (change)="onPartenzaChange()">
         <option [ngValue]="null" disabled selected>Seleziona stazione di partenza</option>
         <option *ngFor="let p of partenze" [value]="p">{{ p }}</option>
       </select>
@@ -15,7 +16,7 @@
 
     <div class="input-group">
       <label for="destinazione">Destinazione</label>
-      <select [(ngModel)]="selectedDestinazione" (change)="onDestinazioneChange()" [disabled]="!selectedPartenza">
+      <select id="destinazione" [(ngModel)]="selectedDestinazione" (change)="onDestinazioneChange()" [disabled]="!selectedPartenza">
         <option [ngValue]="null" disabled selected>Seleziona stazione di arrivo</option>
         <option *ngFor="let d of destinazioni" [value]="d">{{ d }}</option>
       </select>
@@ -23,12 +24,14 @@
 
     <div class="input-group">
       <label for="data">Data</label>
-      <input type="date" [(ngModel)]="selectedData" [min]="today()" [disabled]="isLoadingDate || (!selectedPartenza && !selectedDestinazione)"
+      <input id="data"
+             type="date"
+             [(ngModel)]="selectedDataString"
+             [min]="today()"
+             [max]="'2100-12-31'"
+             [disabled]="isLoadingDate"
              [ngModelOptions]="{ standalone: true }"
-             [attr.max]="'2100-12-31'"
-             [attr.placeholder]="'Seleziona data'"
-             [attr.disabledDates]="dateDisponibili"
-             [attr.dateFilter]="dateFilter">
+             (change)="onDateChange($event)">
     </div>
 
     <button class="search-button" [disabled]="!isSearchEnabled()" (click)="onCerca()">CERCA</button>

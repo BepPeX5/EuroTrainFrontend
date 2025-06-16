@@ -1,78 +1,156 @@
-/* search-train.component.css */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f4f4;
-}
-
-.search-container {
+.app-search-train-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2rem;
+  background-color: #f4f6f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* HEADER */
 .search-header {
-  width: 100%;
-  padding: 1rem;
-  background-color: #1c425e;
+  background-color: #0a3d62;
+  padding: 16px 40px;
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-  height: 50px;
+  height: 60px;
+  width: auto;
+  margin-right: 12px;
+  object-fit: contain;
 }
 
+.brand-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+/* CENTRO */
 .search-box {
-  background-color: white;
-  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.search-box > div {
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 800px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  max-width: 700px;
+  margin-bottom: 20px;
 }
 
 .input-group {
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
 .input-group label {
-  font-weight: bold;
-  color: #1c425e;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
 }
 
 .input-group select,
-.input-group input[type='date'] {
-  padding: 0.5rem;
+.input-group input {
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 16px;
 }
 
+/* MATERIAL DATE FIELD */
+.material-date-field {
+  width: 100%;
+}
+
+.material-date-field .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.material-date-field .mat-form-field-flex {
+  background-color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.material-date-field.mat-form-field-appearance-fill .mat-form-field-outline {
+  display: none;
+}
+
+/* BOTTONE CERCA */
 .search-button {
-  grid-column: span 2;
-  padding: 0.75rem;
-  font-size: 1.2rem;
-  color: #1c425e;
-  background-color: #fed544;
+  width: 100%;
+  max-width: 700px;
+  background-color: #f1c40f;
+  color: #0a3d62;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  border-radius: 6px;
+  padding: 18px;
+  font-size: 18px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover:enabled {
+  background-color: #f39c12;
 }
 
 .search-button:disabled {
-  background-color: #ccc;
+  background-color: #ddd;
   cursor: not-allowed;
 }
 
-.search-button:hover:not(:disabled) {
-  background-color: #f3c938;
+.input-group input[type="date"] {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+}
+
+/* SFONDO FUTURISTICO CON GRADIENTE ANIMATO */
+.app-search-train-container {
+  background: linear-gradient(-45deg, #0a3d62, #1e5f8a, #123c5a, #0a3d62);
+  background-size: 400% 400%;
+  animation: gradientFlow 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* GRADIENTE ANIMATO */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* EFFETTO GLOW CURSORE */
+input:hover,
+select:hover,
+button:hover {
+  box-shadow: 0 0 12px 2px rgba(241, 196, 15, 0.6), 0 0 30px 3px rgba(10, 61, 98, 0.4);
+  transition: box-shadow 0.3s ease-in-out;
 }

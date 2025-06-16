@@ -12,7 +12,7 @@ import { Viaggio } from '../../services/models';
   selector: 'app-search-train',
   templateUrl: './search-train.html',
   styleUrls: ['./search-train.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule]
 })
 export class SearchComponent implements OnInit {
   partenze: string[] = [];
@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
 
   selectedPartenza: string | null = null;
   selectedDestinazione: string | null = null;
-  selectedData: string | null = null;
+  selectedDataString: string | null = null;
 
   isLoadingDestinazioni = false;
   isLoadingDate = false;
@@ -34,18 +34,14 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.stazioneService.caricaStazioniPartenza().subscribe({
-      next: (data: string[]) => {
-        this.partenze = data;
-      },
-      error: (err) => {
-        console.error('Errore nel caricamento delle partenze:', err);
-      }
+      next: (data: string[]) => this.partenze = data,
+      error: (err) => console.error('Errore nel caricamento delle partenze:', err)
     });
   }
 
   onPartenzaChange(): void {
     this.selectedDestinazione = null;
-    this.selectedData = null;
+    this.selectedDataString = null;
     this.destinazioni = [];
     this.dateDisponibili = [];
 
@@ -62,13 +58,13 @@ export class SearchComponent implements OnInit {
   }
 
   onDestinazioneChange(): void {
-    this.selectedData = null;
+    this.selectedDataString = null;
     this.dateDisponibili = [];
 
     if (this.selectedPartenza && this.selectedDestinazione) {
       this.isLoadingDate = true;
       this.stazioneService.caricaDateDisponibili(this.selectedPartenza, this.selectedDestinazione).subscribe({
-        next: (data) => {
+        next: (data: string[]) => {
           this.dateDisponibili = data;
           this.isLoadingDate = false;
         },
@@ -77,19 +73,36 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  onDateChange(event: any): void {
+    const selected = event.target.value;
+    if (
+      this.selectedPartenza && this.selectedDestinazione &&
+      !this.dateDisponibili.includes(selected)
+    ) {
+      this.selectedDataString = null;
+      alert("La data selezionata non è disponibile per questa tratta.");
+    }
+  }
+
   isSearchEnabled(): boolean {
-    return (!!this.selectedPartenza && !!this.selectedDestinazione) || !!this.selectedData;
+    return (
+      (!!this.selectedPartenza && !!this.selectedDestinazione) ||
+      (!!this.selectedDataString && !this.selectedPartenza && !this.selectedDestinazione) ||
+      (!!this.selectedDataString && !!this.selectedPartenza && !!this.selectedDestinazione)
+    );
   }
 
   onCerca(): void {
-    if (this.selectedPartenza && this.selectedDestinazione && this.selectedData) {
-      this.viaggioService.cercaPerTrattaEData(this.selectedPartenza, this.selectedDestinazione, this.selectedData)
+    const dataStr = this.selectedDataString;
+
+    if (this.selectedPartenza && this.selectedDestinazione && dataStr) {
+      this.viaggioService.cercaPerTrattaEData(this.selectedPartenza, this.selectedDestinazione, dataStr)
         .subscribe(v => this.navigateToResults(v));
     } else if (this.selectedPartenza && this.selectedDestinazione) {
       this.viaggioService.cercaPerTratta(this.selectedPartenza, this.selectedDestinazione)
         .subscribe(v => this.navigateToResults(v));
-    } else if (this.selectedData) {
-      this.viaggioService.cercaPerData(this.selectedData)
+    } else if (dataStr) {
+      this.viaggioService.cercaPerData(dataStr)
         .subscribe(v => this.navigateToResults(v));
     }
   }
@@ -105,13 +118,5 @@ export class SearchComponent implements OnInit {
     const dd = String(now.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
-
-  // Funzione che ritorna true solo se la data è selezionabile
-  dateFilter = (date: Date | null): boolean => {
-    if (!date) return false;
-
-    const yyyyMMdd = date.toISOString().split('T')[0]; // Formato 'yyyy-MM-dd'
-    return this.dateDisponibili.includes(yyyyMMdd) && date >= new Date(this.today());
-  };
 }
 
