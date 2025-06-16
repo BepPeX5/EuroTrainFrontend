@@ -1,0 +1,46 @@
+.admin-dashboard {
+  min-height: 100vh;
+  background-color: #0a3d62;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+
+.admin-dashboard h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.admin-dashboard p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.admin-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-buttons button {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #0a3d62;
+  border: none;
+  padding: 16px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.admin-buttons button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}

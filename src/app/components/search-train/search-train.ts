@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { Stazioneservice } from '../../services/stazioneservice';
 import { Viaggioservice } from '../../services/viaggioservice';
 import { Viaggio } from '../../services/models';
+import {KeycloakService} from '../../services/keycloakservice';
+
 
 @Component({
   standalone: true,
@@ -29,7 +31,8 @@ export class SearchComponent implements OnInit {
   constructor(
     private stazioneService: Stazioneservice,
     private viaggioService: Viaggioservice,
-    private router: Router
+    private router: Router,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -136,7 +139,7 @@ export class SearchComponent implements OnInit {
   }
 
   goToAdminLogin(): void {
-    this.router.navigate(['/admin']);
+    this.keycloakService.loginAsAdmin();
   }
 
 }

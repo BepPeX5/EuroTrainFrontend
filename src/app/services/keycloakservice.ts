@@ -28,19 +28,25 @@ export class KeycloakService {
 
   constructor(private router: Router) {}
 
-  // Inizializza senza forzare login all'apertura sito
+  private alreadyInitialized = false;
+
   async init(): Promise<boolean> {
+    if (this.alreadyInitialized) {
+      return this._keycloak?.authenticated ?? false;
+    }
+
     const authenticated = await this.keycloak.init({
-      onLoad: 'check-sso',   // NON forza login subito
+      onLoad: 'check-sso',
       checkLoginIframe: false,
-      silentCheckSsoRedirectUri: 'http://localhost:4200/assets/silent-check-sso.html'
+      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html'
     });
+
+    this.alreadyInitialized = true;
 
     if (authenticated) {
       this.profile = await this.keycloak.loadUserInfo() as unknown as UserProfile;
       this.profile.token = this.keycloak.token || '';
 
-      // Redireziona in base al ruolo se loggato
       if (this.hasRole('Admin')) {
         this.router.navigate(['/admin']);
       } else {
@@ -51,11 +57,15 @@ export class KeycloakService {
     return authenticated;
   }
 
-  // Login volontario per admin (es. clic da bottone)
-  loginAsAdmin() {
-    this.keycloak.login({
-      redirectUri: 'http://localhost:4200/admin-login-callback'
-    });
+  async loginAsAdmin() {
+    const initialized = await this.init();  // Inizializza se non l'hai già fatto
+    if (initialized) {
+      this.keycloak.login({
+        redirectUri: 'http://localhost:4200/admin-login-callback'
+      });
+    } else {
+      console.error('Keycloak non inizializzato correttamente.');
+    }
   }
 
   // Login volontario per utente (es. clic da Prenota)

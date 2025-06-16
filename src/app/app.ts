@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SearchComponent } from './components/search-train/search-train'; // 👈 Importa il componente
+import { SearchComponent } from './components/search-train/search-train';
+import { KeycloakService } from './services/keycloakservice';  // 👈 Import KeycloakService
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,17 @@ import { SearchComponent } from './components/search-train/search-train'; // �
   imports: [
     RouterOutlet,
     FormsModule,
-    SearchComponent // 👈 Importa anche qui per montarlo nel template
+    SearchComponent
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'EuroTrainBE';
+
+  constructor(private keycloakService: KeycloakService) {}
+
+  ngOnInit(): void {
+    this.keycloakService.init();
+  }
 }
