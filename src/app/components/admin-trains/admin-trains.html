@@ -22,13 +22,36 @@
       <button (click)="aggiornaDB()">🔄 Aggiorna DB</button>
     </div>
 
+    <!-- ✅ MESSAGGIO OPERAZIONE -->
+    <div *ngIf="messaggioOperazione" class="messaggio-successo">
+      {{ messaggioOperazione }}
+    </div>
+
     <form class="nuovo-form" (ngSubmit)="modificaId ? confermaModifica() : salvaNuovoViaggio()">
-      <input placeholder="Partenza" [(ngModel)]="nuovoViaggio.stazionePartenza.nome" name="partenza" required />
-      <input placeholder="Destinazione" [(ngModel)]="nuovoViaggio.stazioneDestinazione.nome" name="destinazione" required />
-      <input placeholder="Data" type="date" [(ngModel)]="nuovoViaggio.dataPartenza" name="data" required />
+
+      <!-- 🔽 SELECT STAZIONE PARTENZA -->
+      <select [(ngModel)]="nuovoViaggio.stazionePartenza.nome" name="partenza" required>
+        <option value="" disabled selected>Stazione di Partenza</option>
+        <option *ngFor="let s of stazioniDisponibili" [value]="s">{{ s }}</option>
+      </select>
+
+      <!-- 🔽 SELECT STAZIONE DESTINAZIONE -->
+      <select [(ngModel)]="nuovoViaggio.stazioneDestinazione.nome" name="destinazione" required>
+        <option value="" disabled selected>Stazione di Destinazione</option>
+        <option *ngFor="let s of stazioniDisponibili" [value]="s">{{ s }}</option>
+      </select>
+
+      <input placeholder="Data" type="date" [(ngModel)]="nuovoViaggio.dataPartenza" name="data" [min]="oggi" required />
       <input placeholder="Ora" type="time" [(ngModel)]="nuovoViaggio.orarioPartenza" name="ora" required />
-      <input placeholder="Codice Treno" [(ngModel)]="nuovoViaggio.treno.codice" name="treno" required />
+
+      <!-- 🔽 SELECT CODICE TRENO -->
+      <select [(ngModel)]="nuovoViaggio.treno.codice" name="treno" required>
+        <option value="" disabled selected>Seleziona Codice Treno</option>
+        <option *ngFor="let codice of codiciTrenoDisponibili" [value]="codice">{{ codice }}</option>
+      </select>
+
       <input placeholder="Prezzo" type="number" [(ngModel)]="nuovoViaggio.prezzo" name="prezzo" required />
+
       <button type="submit">{{ modificaId ? '💾 Modifica' : '➕ Aggiungi' }}</button>
     </form>
 
@@ -52,7 +75,7 @@
           <td>{{ v.stazionePartenza.nome }}</td>
           <td>{{ v.stazioneDestinazione.nome }}</td>
           <td>{{ v.dataPartenza }}</td>
-          <td>{{ v.orarioPartenza }}</td>
+          <td>{{ formatOrario(v.orarioPartenza) }}</td>
           <td>{{ v.treno.codice }}</td>
           <td>{{ v.prezzo }} €</td>
           <td>
@@ -63,6 +86,6 @@
         </tbody>
       </table>
     </div>
-
   </div>
 </div>
+

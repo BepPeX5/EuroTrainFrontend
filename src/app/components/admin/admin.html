@@ -1,5 +1,11 @@
 <div class="admin-page-container">
 
+  <!-- 🔒 HEADER TOP-RIGHT CON WELCOME E LOGOUT -->
+  <div class="header-welcome" *ngIf="isLoggedIn">
+    <span class="welcome-text">Welcome, {{ nomeUtente }}</span>
+    <button (click)="logout()">Logout</button>
+  </div>
+
   <!-- 🎞️ SLIDESHOW SFONDO -->
   <div class="background-slideshow">
     <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">

@@ -3,10 +3,12 @@ import { SearchComponent } from './components/search-train/search-train';
 import { ResultsComponent } from './components/results/results';
 import { AdminComponent } from './components/admin/admin';
 import {AdminTrainsComponent} from './components/admin-trains/admin-trains';
+import {AdminBookingsComponent} from './components/admin-bookings/admin-bookings';
 
 export const routes: Routes = [
   { path: '', component: SearchComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'admin/trains', component: AdminTrainsComponent }
+  { path: 'admin/trains', component: AdminTrainsComponent },
+  { path: 'admin/bookings', component: AdminBookingsComponent }
 ];

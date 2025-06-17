@@ -1,39 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakService } from '../../services/keycloakservice';
+import { CommonModule } from '@angular/common'; // ✅ Importa CommonModule
 
 @Component({
   standalone: true,
   selector: 'app-admin',
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
-  imports: []
+  imports: [CommonModule] // ✅ Aggiungi qui CommonModule per usare *ngIf, *ngFor, ecc.
 })
 export class AdminComponent implements OnInit {
+  nomeUtente: string = '';
+  isLoggedIn: boolean = false;
+
   constructor(private router: Router, private keycloakService: KeycloakService) {}
 
   ngOnInit(): void {
-    // Aspetta che Keycloak sia stato inizializzato
     const checkInterval = setInterval(() => {
       if (this.keycloakService.isInitialized) {
         clearInterval(checkInterval);
+
         const isAdmin = this.keycloakService.hasRole('admin');
-        console.log('👤 Accesso admin?', isAdmin);
+        this.isLoggedIn = isAdmin;
+
         if (!isAdmin) {
           alert("Accesso negato. Non sei un amministratore.");
           this.router.navigate(['/']);
+        } else {
+          this.nomeUtente = this.keycloakService.profile?.given_name || 'Admin';
         }
       }
-    }, 50); // polling ogni 50ms
+    }, 50);
 
-    // Slideshow automatico (effetto dissolvenza tra immagini)
+    // Slideshow
     const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
     let currentIndex = 0;
     setInterval(() => {
-      images.forEach((img, i) => img.classList.remove('active'));
+      images.forEach((img) => img.classList.remove('active'));
       currentIndex = (currentIndex + 1) % images.length;
       images[currentIndex].classList.add('active');
-    }, 10000); // Cambia immagine ogni 6 secondi
+    }, 10000);
   }
 
   goToTrainAdmin(): void {
@@ -43,5 +50,11 @@ export class AdminComponent implements OnInit {
   goToBookingAdmin(): void {
     this.router.navigate(['/admin/bookings']);
   }
+
+  logout(): void {
+    this.keycloakService.logout();
+  }
 }
+
+
 

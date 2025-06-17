@@ -44,12 +44,15 @@ export interface Viaggio {
   version: number;
 }
 
-// prenotazione.model.ts
 export interface Prenotazione {
+  cliente: {
+    email: string;
+  };
   viaggio: Viaggio;
-  posti: number;  // Numero di posti prenotati
+  posti: number;
   biglietti?: Biglietto[];
   prezzo: number;
+  id?: number;
 }
 
 // biglietto.model.ts
@@ -60,6 +63,7 @@ export interface Biglietto {
   orarioViaggio: string;  // Formato: HH:mm
   nomePasseggero: string;
   cognomePasseggero : string;
+  dataNascita: string;
   tariffa: string;
   prezzo: number;
 }
