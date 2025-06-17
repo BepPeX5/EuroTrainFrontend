@@ -12,93 +12,77 @@ export interface UserProfile {
 
 @Injectable({ providedIn: "root" })
 export class KeycloakService {
-  private _keycloak: Keycloak | undefined;
-  public profile: UserProfile | undefined;
+  private _keycloak: Keycloak = new Keycloak({
+    url: "http://localhost:8080",
+    realm: "eurotrain",
+    clientId: "backend-treni"
+  });
 
-  private get keycloak() {
-    if (!this._keycloak) {
-      this._keycloak = new Keycloak({
-        url: "http://localhost:8080",              // Keycloak URL
-        realm: "eurotrain",                        // Nome del realm
-        clientId: "backend-treni"                  // Client ID usato sia da frontend che backend
-      });
-    }
-    return this._keycloak;
+  public profile: UserProfile | undefined;
+  private _initialized = false;
+
+  get isInitialized(): boolean {
+    return this._initialized;
   }
 
   constructor(private router: Router) {}
 
-  private alreadyInitialized = false;
-
   async init(): Promise<boolean> {
-    if (this.alreadyInitialized) {
-      return this._keycloak?.authenticated ?? false;
-    }
+    if (this._initialized) return this._keycloak.authenticated ?? false;
 
-    const authenticated = await this.keycloak.init({
-      onLoad: 'check-sso',
-      checkLoginIframe: false,
-      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html'
-    });
-
-    this.alreadyInitialized = true;
-
-    if (authenticated) {
-      this.profile = await this.keycloak.loadUserInfo() as unknown as UserProfile;
-      this.profile.token = this.keycloak.token || '';
-
-      if (this.hasRole('Admin')) {
-        this.router.navigate(['/admin']);
-      } else {
-        this.router.navigate(['/prenota']);
-      }
-    }
-
-    return authenticated;
-  }
-
-  async loginAsAdmin() {
-    const initialized = await this.init();  // Inizializza se non l'hai già fatto
-    if (initialized) {
-      this.keycloak.login({
-        redirectUri: 'http://localhost:4200/admin-login-callback'
+    try {
+      const authenticated = await this._keycloak.init({
+        onLoad: 'check-sso',
+        checkLoginIframe: false,
+        silentCheckSsoRedirectUri: `${window.location.origin}/assets/silent-check-sso.html`,
+        pkceMethod: 'S256'
       });
-    } else {
-      console.error('Keycloak non inizializzato correttamente.');
+
+      this._initialized = true;
+
+      if (authenticated) {
+        this.profile = await this._keycloak.loadUserInfo() as UserProfile;
+        this.profile.token = this._keycloak.token || '';
+        console.log('🪪 Token:', this._keycloak.token);
+        console.log('🔓 Ruoli utente:', this.getUserClientRoles());
+      }
+
+      return authenticated;
+    } catch (err) {
+      console.error('Errore inizializzazione Keycloak:', err);
+      return false;
     }
   }
 
-  // Login volontario per utente (es. clic da Prenota)
-  loginUtente() {
-    this.keycloak.login({
-      redirectUri: 'http://localhost:4200/prenota'
+  async loginAsAdmin(): Promise<void> {
+    await this._keycloak.login({
+      redirectUri: `${window.location.origin}/admin`
     });
   }
 
-  // Restituisce token corrente
+  loginUtente(): void {
+    this._keycloak.login({
+      redirectUri: `${window.location.origin}/prenota`
+    });
+  }
+
   getToken(): string {
-    return this.keycloak.token || '';
+    return this._keycloak.token || '';
   }
 
-  // Aggiorna token JWT se sta per scadere
-  async updateToken() {
-    await this.keycloak.updateToken(30);
-  }
-
-  // Ruoli dell'utente (es. Admin o user)
   getUserClientRoles(): string[] {
-    return this.keycloak.resourceAccess?.['backend-treni']?.roles || [];
+    return this._keycloak.resourceAccess?.['backend-treni']?.roles || [];
   }
 
-  // Verifica se ha un certo ruolo
   hasRole(role: string): boolean {
     return this.getUserClientRoles().includes(role);
   }
 
-  // Logout con redirect a home
-  logout() {
-    this.keycloak.logout({
-      redirectUri: "http://localhost:4200"
-    });
+  logout(): void {
+    this._keycloak.logout({ redirectUri: `${window.location.origin}` });
+  }
+
+  get keycloakInstance(): Keycloak {
+    return this._keycloak;
   }
 }

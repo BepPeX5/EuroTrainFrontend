@@ -1,30 +1,88 @@
-.admin-dashboard {
+/* ---------- CONTAINER PRINCIPALE ---------- */
+.admin-page-container {
+  position: relative;
   min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
   background-color: #0a3d62;
-  color: white;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ---------- SFONDO SLIDESHOW ---------- */
+.background-slideshow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.background-slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  filter: brightness(0.6) blur(3px); /* 👈 sfocatura elegante */
+}
+
+.background-slideshow img.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* ---------- GRADIENTE OVERLAY ---------- */
+.background-fade-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(10, 61, 98, 0.3) 0%, #0a3d62 85%);
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- CONTENUTO CENTRALE ---------- */
+.admin-dashboard {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 50px;
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   text-align: center;
-  padding: 40px;
+  color: white;
+  max-width: 600px;
+  margin: auto;
 }
 
 .admin-dashboard h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
+  font-size: 38px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
 
 .admin-dashboard p {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 30px;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
 }
 
 .admin-buttons {
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .admin-buttons button {
@@ -34,10 +92,10 @@
   padding: 16px 30px;
   font-size: 18px;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .admin-buttons button:hover {

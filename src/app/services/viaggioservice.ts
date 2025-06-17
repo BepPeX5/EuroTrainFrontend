@@ -42,6 +42,7 @@ export class Viaggioservice {
 
   // 🔒 GET tutti i viaggi (solo per admin)
   getAllViaggiAdmin(): Observable<Viaggio[]> {
+    console.log('📡 Chiamata a getAllViaggiAdmin');
     return this.http.get<Viaggio[]>(`${this.baseUrl}/viaggio`);
   }
 

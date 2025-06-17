@@ -1,9 +1,22 @@
-<div class="admin-dashboard">
-  <h1>Area Amministratore</h1>
-  <p>Scegli una sezione da gestire:</p>
+<div class="admin-page-container">
 
-  <div class="admin-buttons">
-    <button (click)="goToTrainAdmin()">🚄 Gestione Viaggi</button>
-    <button (click)="goToBookingAdmin()">🧾 Gestione Prenotazioni</button>
+  <!-- 🎞️ SLIDESHOW SFONDO -->
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
+    <img src="/assets/immagine3.png" alt="slide 2">
+  </div>
+
+  <!-- ✨ EFFETTO GRADIENTE + SFUMATURA -->
+  <div class="background-fade-overlay"></div>
+
+  <!-- 📦 CONTENUTO AREA ADMIN -->
+  <div class="admin-dashboard">
+    <h1>Area Amministratore</h1>
+    <p>Scegli una sezione da gestire:</p>
+
+    <div class="admin-buttons">
+      <button (click)="goToTrainAdmin()">🚄 Gestione Viaggi</button>
+      <button (click)="goToBookingAdmin()">🧾 Gestione Prenotazioni</button>
+    </div>
   </div>
 </div>

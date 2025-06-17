@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SearchComponent } from './components/search-train/search-train';
-import { KeycloakService } from './services/keycloakservice';  // 👈 Import KeycloakService
+import { KeycloakService } from './services/keycloakservice';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,8 @@ export class AppComponent implements OnInit {
 
   constructor(private keycloakService: KeycloakService) {}
 
-  ngOnInit(): void {
-    this.keycloakService.init();
+  async ngOnInit(): Promise<void> {
+    const authenticated = await this.keycloakService.init();
+    console.log('🔑 Keycloak init in AppComponent:', authenticated);
   }
 }

@@ -1,0 +1,68 @@
+<div class="admin-trains-page">
+
+  <!-- 🎞️ SFONDO SLIDESHOW -->
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
+    <img src="/assets/immagine3.png" alt="slide 2">
+  </div>
+
+  <!-- ✨ SFUMATURA -->
+  <div class="background-fade-overlay"></div>
+
+  <!-- 📦 CONTENUTO -->
+  <div class="admin-trains">
+
+    <h2>🚄 Gestione Viaggi</h2>
+
+    <div class="azioni">
+      <label>Numero da generare:
+        <input [(ngModel)]="numeroDaGenerare" type="number" />
+      </label>
+      <button (click)="generaViaggi()">🎲 Genera Viaggi</button>
+      <button (click)="aggiornaDB()">🔄 Aggiorna DB</button>
+    </div>
+
+    <form class="nuovo-form" (ngSubmit)="modificaId ? confermaModifica() : salvaNuovoViaggio()">
+      <input placeholder="Partenza" [(ngModel)]="nuovoViaggio.stazionePartenza.nome" name="partenza" required />
+      <input placeholder="Destinazione" [(ngModel)]="nuovoViaggio.stazioneDestinazione.nome" name="destinazione" required />
+      <input placeholder="Data" type="date" [(ngModel)]="nuovoViaggio.dataPartenza" name="data" required />
+      <input placeholder="Ora" type="time" [(ngModel)]="nuovoViaggio.orarioPartenza" name="ora" required />
+      <input placeholder="Codice Treno" [(ngModel)]="nuovoViaggio.treno.codice" name="treno" required />
+      <input placeholder="Prezzo" type="number" [(ngModel)]="nuovoViaggio.prezzo" name="prezzo" required />
+      <button type="submit">{{ modificaId ? '💾 Modifica' : '➕ Aggiungi' }}</button>
+    </form>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Partenza</th>
+          <th>Destinazione</th>
+          <th>Data</th>
+          <th>Ora</th>
+          <th>Treno</th>
+          <th>Prezzo</th>
+          <th>Azioni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let v of viaggi">
+          <td>{{ v.id }}</td>
+          <td>{{ v.stazionePartenza.nome }}</td>
+          <td>{{ v.stazioneDestinazione.nome }}</td>
+          <td>{{ v.dataPartenza }}</td>
+          <td>{{ v.orarioPartenza }}</td>
+          <td>{{ v.treno.codice }}</td>
+          <td>{{ v.prezzo }} €</td>
+          <td>
+            <button (click)="iniziaModifica(v)">✏️</button>
+            <button (click)="elimina(v.id)">❌</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
