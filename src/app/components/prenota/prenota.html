@@ -1,0 +1,45 @@
+<div class="prenota-background">
+  <!-- SFONDO SLIDESHOW -->
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
+    <img src="/assets/immagine3.png" alt="slide 2">
+  </div>
+
+  <!-- OVERLAY SFUMATO -->
+  <div class="background-fade-overlay"></div>
+
+  <!-- CONTENUTO CENTRALE SCORRIBILE -->
+  <div class="prenota-container">
+    <h2>Inserisci Dati Passeggeri</h2>
+
+    <div *ngIf="erroreCampi" class="errore-msg">{{ erroreCampi }}</div>
+    <div *ngIf="erroreConflitto" class="errore-msg">{{ erroreConflitto }}</div>
+
+    <form *ngFor="let b of biglietti; let i = index">
+      <div class="biglietto-card">
+        <h3>Biglietto {{ i + 1 }}</h3>
+        <label>Nome:</label>
+        <input type="text" [(ngModel)]="b.nomePasseggero" name="nome-{{i}}" />
+
+        <label>Cognome:</label>
+        <input type="text" [(ngModel)]="b.cognomePasseggero" name="cognome-{{i}}" />
+
+        <label>Data di nascita:</label>
+        <input type="date" [(ngModel)]="b.dataNascita" name="dataNascita-{{i}}" />
+
+        <label>Tariffa:</label>
+        <select [(ngModel)]="b.tariffa" (change)="aggiornaPrezzo(i)" name="tariffa-{{i}}">
+          <option *ngFor="let t of tariffe" [value]="t">{{ t }}</option>
+        </select>
+
+        <div class="prezzo-biglietto">Prezzo: {{ b.prezzo | currency:'EUR' }}</div>
+      </div>
+    </form>
+
+    <button class="prosegui-btn" (click)="procediPagamento()">Procedi al pagamento</button>
+
+    <div *ngIf="mostraRiepilogo" class="riepilogo-totale">
+      <h3>Totale: {{ prezzoTotale | currency:'EUR' }}</h3>
+    </div>
+  </div>
+</div>

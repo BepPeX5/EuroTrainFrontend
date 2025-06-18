@@ -20,7 +20,11 @@ export class ResultsComponent {
   }
 
   ngOnInit(): void {
-    this.startSlideshow()
+    this.startSlideshow();
+  }
+
+  selezionaViaggio(viaggio: Viaggio): void {
+    this.router.navigate(['/riepilogo'], { state: { viaggio } });
   }
 
   startSlideshow(): void {
@@ -34,6 +38,6 @@ export class ResultsComponent {
       images[index].classList.remove('active');
       index = (index + 1) % images.length;
       images[index].classList.add('active');
-    },20000); // cambia immagine ogni 8s
+    }, 20000);
   }
 }

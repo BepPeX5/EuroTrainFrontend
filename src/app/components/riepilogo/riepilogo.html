@@ -1,0 +1,37 @@
+<div class="riepilogo-background">
+
+  <!-- SLIDESHOW -->
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
+    <img src="/assets/immagine3.png" alt="slide 2">
+  </div>
+
+  <!-- OVERLAY SFUMATO -->
+  <div class="background-fade-overlay"></div>
+
+  <!-- CONTENUTO -->
+  <div class="riepilogo-container" *ngIf="viaggio">
+    <h2>Riepilogo Viaggio</h2>
+
+    <div class="riepilogo-card">
+      <div class="info-row"><strong>Partenza:</strong> {{ viaggio.stazionePartenza.nome }}</div>
+      <div class="info-row"><strong>Destinazione:</strong> {{ viaggio.stazioneDestinazione.nome }}</div>
+      <div class="info-row"><strong>Data:</strong> {{ viaggio.dataPartenza }}</div>
+      <div class="info-row"><strong>Orario:</strong> {{ viaggio.orarioPartenza }}</div>
+      <div class="info-row"><strong>Prezzo per biglietto:</strong> {{ viaggio.prezzo }}€</div>
+      <div class="info-row"><strong>Posti disponibili:</strong> {{ viaggio.disponibilitaPosti }}</div>
+    </div>
+
+    <div class="selezione-posti">
+      <label for="posti">Numero di biglietti:</label>
+      <input type="number" id="posti" name="posti" min="1" [max]="viaggio.disponibilitaPosti"
+             [(ngModel)]="posti" (input)="controllaPosti()" />
+      <div *ngIf="errorePosti" class="errore-msg">
+        ⚠️ Numero di biglietti superiore ai posti disponibili!
+      </div>
+    </div>
+
+    <button class="prosegui-btn" (click)="procedi()" [disabled]="errorePosti">Procedi</button>
+  </div>
+</div>
+

@@ -45,7 +45,7 @@ export interface Viaggio {
 }
 
 export interface Prenotazione {
-  cliente: {
+  cliente?: {
     email: string;
   };
   viaggio: Viaggio;
@@ -67,3 +67,5 @@ export interface Biglietto {
   tariffa: string;
   prezzo: number;
 }
+
+export type Tariffa = 'ECONOMY' | 'BUSINESS' | 'PRIMACLASSE';

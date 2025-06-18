@@ -30,7 +30,7 @@
         <tbody>
         <ng-container *ngFor="let p of prenotazioni">
           <tr>
-            <td>{{ p.cliente.email }}</td>
+            <td>{{ p.cliente?.email }}</td>
             <td>{{ p.viaggio.id }}</td>
             <td>{{ p.posti }}</td>
             <td>{{ p.prezzo | currency:'EUR':'symbol' }}</td>

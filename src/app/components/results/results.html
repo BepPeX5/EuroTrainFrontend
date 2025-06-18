@@ -1,4 +1,3 @@
-<!-- results.html -->
 <div class="results-background">
   <div class="background-slideshow">
     <img src="/assets/immagine1.jpeg" alt="slide 1">
@@ -6,26 +5,35 @@
   </div>
   <div class="background-fade-overlay"></div>
 
-  <div class="results-container">
-    <h2>Risultati disponibili</h2>
+  <div class="results-content-scroll">
+    <div class="results-container">
+      <h2>Risultati disponibili</h2>
 
-    <div *ngIf="viaggi.length > 0; else noResults">
-      <div class="viaggio-card" *ngFor="let viaggio of viaggi">
-        <div class="card-left">
-          <p><strong>Partenza:</strong><br> {{ viaggio.stazionePartenza.nome }}</p>
-          <p><strong>Destinazione:</strong><br> {{ viaggio.stazioneDestinazione.nome }}</p>
-        </div>
-        <div class="card-right">
-          <p><strong>Data:</strong><br> {{ viaggio.dataPartenza }}</p>
-          <p><strong>Prezzo:</strong><br> {{ viaggio.prezzo }}€</p>
+      <div *ngIf="viaggi.length > 0; else noResults">
+        <div
+          class="viaggio-card"
+          *ngFor="let viaggio of viaggi; let last = last"
+          [class.last-card]="last"
+        >
+          <div class="card-info">
+            <div class="card-left">
+              <p><strong>Partenza:</strong><br> {{ viaggio.stazionePartenza.nome }}</p>
+              <p><strong>Destinazione:</strong><br> {{ viaggio.stazioneDestinazione.nome }}</p>
+            </div>
+            <div class="card-right">
+              <p><strong>Data:</strong><br> {{ viaggio.dataPartenza }}</p>
+              <p><strong>Prezzo:</strong><br> {{ viaggio.prezzo }}€</p>
+            </div>
+          </div>
+          <button class="seleziona-btn" (click)="selezionaViaggio(viaggio)">Seleziona</button>
         </div>
       </div>
+
+      <ng-template #noResults>
+        <div class="no-results">
+          <p>Nessun treno trovato per i criteri selezionati.</p>
+        </div>
+      </ng-template>
     </div>
-
-    <ng-template #noResults>
-      <div class="no-results">
-        <p>Nessun treno trovato per i criteri selezionati.</p>
-      </div>
-    </ng-template>
   </div>
 </div>

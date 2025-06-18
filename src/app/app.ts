@@ -22,6 +22,5 @@ export class AppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const authenticated = await this.keycloakService.init();
-    console.log('🔑 Keycloak init in AppComponent:', authenticated);
   }
 }
