@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Prenotazione, Biglietto, Tariffa } from '../../services/models';
 import { Prenotazioneservice } from '../../services/prenotazioneservice';
-import { OnInit } from '@angular/core';
-
 
 @Component({
   selector: 'app-prenota',
@@ -27,16 +25,29 @@ export class PrenotaComponent implements OnInit {
   constructor(
     private router: Router,
     private prenotazioneService: Prenotazioneservice
-  ) {
-    const nav = this.router.getCurrentNavigation();
-    const state = nav?.extras?.state as { prenotazione: Prenotazione, posti: number };
-    this.prenotazione = state?.prenotazione;
-    this.posti = state?.posti;
-
-    this.inizializzaBiglietti();
-  }
+  ) {}
 
   ngOnInit(): void {
+    const state = history.state as { prenotazione: Prenotazione, posti: number };
+
+    if (state?.prenotazione && state?.posti) {
+      this.prenotazione = state.prenotazione;
+      this.posti = state.posti;
+    } else {
+      const storedPrenotazione = localStorage.getItem('prenotazione');
+      const storedPosti = localStorage.getItem('posti');
+
+      if (storedPrenotazione && storedPosti) {
+        this.prenotazione = JSON.parse(storedPrenotazione);
+        this.posti = parseInt(storedPosti, 10);
+      } else {
+        this.router.navigate(['/']);
+        return;
+      }
+    }
+
+    this.inizializzaBiglietti();
+
     const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
     let currentIndex = 0;
     setInterval(() => {
@@ -96,6 +107,9 @@ export class PrenotaComponent implements OnInit {
         this.prenotazione = aggiornata;
         this.calcolaPrezzoTotale();
         this.mostraRiepilogo = true;
+
+        localStorage.removeItem('prenotazione');
+        localStorage.removeItem('posti');
       },
       error: (err) => {
         if (err.status === 500) {
@@ -119,6 +133,19 @@ export class PrenotaComponent implements OnInit {
   }
 
   annulla(): void {
+    localStorage.removeItem('prenotazione');
+    localStorage.removeItem('posti');
     this.router.navigate(['/']);
   }
+
+  tornaAlRiepilogo(): void {
+    if (this.prenotazione) {
+      localStorage.setItem('prenotazione', JSON.stringify(this.prenotazione));
+      localStorage.setItem('posti', this.posti.toString());
+      localStorage.setItem('viaggio', JSON.stringify(this.prenotazione.viaggio));
+    }
+    this.router.navigate(['/riepilogo']);
+  }
 }
+
+

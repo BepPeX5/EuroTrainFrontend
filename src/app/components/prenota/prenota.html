@@ -10,6 +10,9 @@
 
   <!-- CONTENUTO CENTRALE SCORRIBILE -->
   <div class="prenota-container">
+    <!-- 🔙 Pulsante torna indietro -->
+    <button class="torna-btn" (click)="tornaAlRiepilogo()">← Torna alla selezione</button>
+
     <h2>Inserisci Dati Passeggeri</h2>
 
     <div *ngIf="erroreCampi" class="errore-msg">{{ erroreCampi }}</div>

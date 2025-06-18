@@ -26,7 +26,7 @@ export class RiepilogoComponent implements OnInit {
   ) {
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as { viaggio: Viaggio };
-    this.viaggio = state?.viaggio;
+    this.viaggio = state?.viaggio ?? JSON.parse(localStorage.getItem('viaggio') || 'null');
   }
 
   ngOnInit(): void {
@@ -37,6 +37,20 @@ export class RiepilogoComponent implements OnInit {
       currentIndex = (currentIndex + 1) % images.length;
       images[currentIndex].classList.add('active');
     }, 10000);
+
+    // ✅ Reinizzializza Keycloak (utile dopo "torna indietro")
+    this.keycloakService.init().then(async authenticated => {
+      if (authenticated) {
+        const profilo: Keycloak.KeycloakProfile = await this.keycloakService.keycloakInstance.loadUserInfo();
+        this.keycloakService.profile = {
+          sub: '',
+          email: profilo['email'] ?? '',
+          given_name: profilo['given_name'] ?? '',
+          family_name: profilo['family_name'] ?? '',
+          token: this.keycloakService.getToken()
+        };
+      }
+    });
   }
 
   controllaPosti(): void {
@@ -50,10 +64,22 @@ export class RiepilogoComponent implements OnInit {
   async procedi(): Promise<void> {
     if (!this.viaggio || this.posti < 1 || this.errorePosti) return;
 
+    const prenotazione: Prenotazione = {
+      viaggio: this.viaggio,
+      posti: this.posti,
+      prezzo: this.viaggio.prezzo! * this.posti,
+      biglietti: []
+    };
+
+    localStorage.setItem('prenotazione', JSON.stringify(prenotazione));
+    localStorage.setItem('posti', this.posti.toString());
+    localStorage.setItem('viaggio', JSON.stringify(this.viaggio));
+    localStorage.setItem('redirectAfterLogin', '/prenota');
+
     const isAuthenticated = await this.keycloakService.init();
 
     if (!isAuthenticated) {
-      this.keycloakService.loginUtente(); // 🔐 Reindirizza al login su /prenota
+      this.keycloakService.loginUtente();
       return;
     }
 
@@ -62,15 +88,7 @@ export class RiepilogoComponent implements OnInit {
       return;
     }
 
-    const prezzoTotale = this.viaggio.prezzo! * this.posti;
-
-    const prenotazione: Prenotazione = {
-      viaggio: this.viaggio,
-      posti: this.posti,
-      prezzo: prezzoTotale,
-      biglietti: []
-    };
-
+    // ✅ Chiamata backend
     this.clienteService.prenota(prenotazione).subscribe({
       next: (creata) => {
         this.router.navigate(['/prenota'], {

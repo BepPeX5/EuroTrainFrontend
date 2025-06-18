@@ -45,6 +45,12 @@ export class KeycloakService {
         this.profile.token = this._keycloak.token || '';
         console.log('🪪 Token:', this._keycloak.token);
         console.log('🔓 Ruoli utente:', this.getUserClientRoles());
+
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          localStorage.removeItem('redirectAfterLogin');
+          this.router.navigateByUrl(redirectPath);
+        }
       }
 
       return authenticated;
@@ -61,8 +67,9 @@ export class KeycloakService {
   }
 
   loginUtente(): void {
+    const redirect = localStorage.getItem('redirectAfterLogin') || '/';
     this._keycloak.login({
-      redirectUri: `${window.location.origin}/prenota`
+      redirectUri: `${window.location.origin}${redirect}`
     });
   }
 

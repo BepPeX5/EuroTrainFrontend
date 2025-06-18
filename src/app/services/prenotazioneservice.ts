@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Biglietto, Prenotazione, Viaggio} from './models';
-import {Observable} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Biglietto, Prenotazione, Viaggio } from './models';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,17 +34,10 @@ export class Prenotazioneservice {
     });
   }
 
-  creaPrenotazione(viaggio: Viaggio, posti: number, prezzo: number): Observable<Prenotazione> {
-    const params = {
-      posti: posti.toString(),
-      prezzo: prezzo.toString()
-    };
-
-    return this.http.post<Prenotazione>(
-      'http://localhost:8081/api/prenotazioni/crea',
-      viaggio, // questo è il corpo della richiesta (RequestBody)
-      { params } // questi sono i RequestParam
-    );
+  // ✅ Conferma la prenotazione
+  confermaPrenotazione(viaggioId: number): Observable<void> {
+    const params = { viaggioId: viaggioId.toString() };
+    return this.http.put<void>(`${this.baseUrl}/conferma`, null, { params });
   }
 
   // 🔐 Aggiunge biglietti a una prenotazione
@@ -62,6 +55,5 @@ export class Prenotazioneservice {
   calcolaPrezzoTotale(prenotazione: Prenotazione): Observable<number> {
     return this.http.post<number>(`${this.baseUrl}/prezzoTotale`, prenotazione);
   }
-
-
 }
+

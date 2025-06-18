@@ -116,6 +116,27 @@ h2 {
   background: linear-gradient(135deg, #f39c12, #e67e22);
 }
 
+.torna-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #ffffff33, #ffffff22);
+  color: #f1c40f;
+  border: 2px solid #f1c40f;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.torna-btn:hover {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #0a3d62;
+}
+
+
 .errore-msg {
   background-color: #e74c3c;
   padding: 10px;
