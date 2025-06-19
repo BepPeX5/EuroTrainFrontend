@@ -53,6 +53,7 @@ export interface Prenotazione {
   biglietti?: Biglietto[];
   prezzo: number;
   id?: number;
+  confermata?: boolean;
 }
 
 // biglietto.model.ts

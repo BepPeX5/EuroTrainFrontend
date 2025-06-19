@@ -28,14 +28,7 @@ export class RiepilogoComponent implements OnInit {
     this.viaggio = state?.viaggio ?? JSON.parse(localStorage.getItem('viaggio') || 'null');
   }
 
-  ngOnInit(): void {
-    const token = localStorage.getItem('kc_token');
-    if (token) {
-      console.log('Utente già loggato, token trovato.');
-    } else {
-      console.log('Token non trovato, chiedo login.');
-    }
-
+  async ngOnInit(): Promise<void> {
     const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
     let currentIndex = 0;
     setInterval(() => {
@@ -43,6 +36,14 @@ export class RiepilogoComponent implements OnInit {
       currentIndex = (currentIndex + 1) % images.length;
       images[currentIndex].classList.add('active');
     }, 10000);
+
+    // ✅ Dopo il login, riesegui procedi solo 1 volta
+    const token = localStorage.getItem('kc_token');
+    const isFirstLoad = !sessionStorage.getItem('riepilogo_reentered');
+    if (token && isFirstLoad) {
+      sessionStorage.setItem('riepilogo_reentered', 'true');
+      await this.procedi();
+    }
   }
 
   controllaPosti(): void {
@@ -58,6 +59,7 @@ export class RiepilogoComponent implements OnInit {
 
     const prezzoTotale = this.viaggio.prezzo!;
 
+    // Salva per eventuale recupero
     localStorage.setItem('prenotazione', JSON.stringify({
       viaggio: this.viaggio,
       posti: this.posti,
@@ -65,12 +67,14 @@ export class RiepilogoComponent implements OnInit {
     }));
     localStorage.setItem('posti', this.posti.toString());
     localStorage.setItem('viaggio', JSON.stringify(this.viaggio));
-    localStorage.setItem('redirectAfterLogin', '/prenota');
 
     const isAuthenticated = await this.keycloakService.init();
 
     if (!isAuthenticated) {
-      this.keycloakService.loginUtente();
+      sessionStorage.removeItem('riepilogo_reentered'); // assicura che venga rieseguito
+      this.keycloakService.loginUtente({
+        redirectUri: `${window.location.origin}/riepilogo`
+      });
       return;
     }
 
@@ -79,11 +83,11 @@ export class RiepilogoComponent implements OnInit {
       return;
     }
 
-    // ✅ Chiamata corretta con parametri backend: viaggio nel body, posti/prezzo nei query param
     this.clienteService
       .prenota(this.viaggio, this.posti, prezzoTotale)
       .subscribe({
         next: (creata) => {
+          console.log('✅ Prenotazione creata con successo:', creata);
           this.router.navigate(['/prenota'], {
             state: {
               prenotazione: creata,
@@ -93,7 +97,7 @@ export class RiepilogoComponent implements OnInit {
         },
         error: (err) => {
           alert("Errore nella creazione della prenotazione. Riprova.");
-          console.error('Errore durante la creazione della prenotazione:', err);
+          console.error('❌ Errore durante la creazione della prenotazione:', err);
         }
       });
   }

@@ -67,12 +67,11 @@ export class KeycloakService {
     });
   }
 
-  loginUtente(): void {
-    const redirect = localStorage.getItem('redirectAfterLogin') || '/';
-    this._keycloak.login({
-      redirectUri: `${window.location.origin}${redirect}`
-    });
+  loginUtente(options?: { redirectUri?: string }): void {
+    const redirectUri = options?.redirectUri || `${window.location.origin}/`;
+    this._keycloak.login({ redirectUri });
   }
+
 
   getToken(): string {
     return this._keycloak.token || '';

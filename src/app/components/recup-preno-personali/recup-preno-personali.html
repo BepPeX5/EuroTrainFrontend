@@ -1,0 +1,74 @@
+<div class="admin-trains-page">
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
+    <img src="/assets/immagine3.png" alt="slide 2">
+  </div>
+
+  <div class="background-fade-overlay"></div>
+
+  <div class="admin-trains">
+    <h2>📋 Le Tue Prenotazioni</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+        <tr>
+          <th>Codice Viaggio</th>
+          <th>Posti</th>
+          <th>Prezzo Totale</th>
+          <th>Stato</th>
+          <th>Dettagli</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let p of prenotazioni">
+          <tr>
+            <td>{{ p.viaggio.id }}</td>
+            <td>{{ p.posti }}</td>
+            <td>{{ p.prezzo | currency:'EUR' }}</td>
+            <td>{{ p.confermata ? '✅ Confermata' : '⏳ In attesa' }}</td>
+            <td>
+              <button (click)="toggleDettagli(p.id!)">
+                {{ dettaglioAperto === p.id ? '🔽 Chiudi' : '🔍 Dettagli' }}
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="dettaglioAperto === p.id">
+            <td colspan="5">
+              <table class="sottotabella">
+                <thead>
+                <tr>
+                  <th>Partenza</th>
+                  <th>Destinazione</th>
+                  <th>Data</th>
+                  <th>Ora</th>
+                  <th>Nome</th>
+                  <th>Cognome</th>
+                  <th>Data Nascita</th>
+                  <th>Tariffa</th>
+                  <th>Prezzo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let b of p.biglietti">
+                  <td>{{ p.viaggio.stazionePartenza.nome }}</td>
+                  <td>{{ p.viaggio.stazioneDestinazione.nome }}</td>
+                  <td>{{ p.viaggio.dataPartenza }}</td>
+                  <td>{{ p.viaggio.orarioPartenza?.substring(0, 5) }}</td>
+                  <td>{{ b.nomePasseggero }}</td>
+                  <td>{{ b.cognomePasseggero }}</td>
+                  <td>{{ b.dataNascita }}</td>
+                  <td>{{ b.tariffa }}</td>
+                  <td>{{ b.prezzo | currency:'EUR' }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

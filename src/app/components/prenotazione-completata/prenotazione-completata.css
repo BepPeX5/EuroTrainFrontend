@@ -19,13 +19,19 @@
 
 .button-group {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 20px;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* ✅ Bottoni in stile giallo come da richiesta */
-.button-group button {
+.brand-text {
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
+}
+
+/* ✨ Bottoni affiancati, in stile giallo coerente */
+.success-btn {
   padding: 14px 30px;
   font-size: 18px;
   font-weight: bold;
@@ -36,11 +42,10 @@
   background: linear-gradient(135deg, #f1c40f, #f39c12);
   transition: transform 0.3s ease, background 0.3s ease;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  width: 80%;
-  max-width: 300px;
+  min-width: 220px;
 }
 
-.button-group button:hover {
+.success-btn:hover {
   transform: scale(1.05);
   background: linear-gradient(135deg, #f39c12, #e67e22);
 }

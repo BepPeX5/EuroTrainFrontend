@@ -8,6 +8,7 @@ import { RiepilogoComponent } from './components/riepilogo/riepilogo';
 import {PrenotaComponent} from './components/prenota/prenota';
 import {PagamentoComponent} from './components/pagamento/pagamento';
 import {PrenotazioneCompletataComponent} from './components/prenotazione-completata/prenotazione-completata';
+import {RecupPrenoPersonaliComponent} from './components/recup-preno-personali/recup-preno-personali';
 
 export const routes: Routes = [
   { path: '', component: SearchComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'prenota', component: PrenotaComponent },
   { path: 'pagamento', component: PagamentoComponent },
   { path: 'prenotazione-completata', component: PrenotazioneCompletataComponent },
+  { path: 'recup-preno-personali', component: RecupPrenoPersonaliComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'admin/trains', component: AdminTrainsComponent },
   { path: 'admin/bookings', component: AdminBookingsComponent }
