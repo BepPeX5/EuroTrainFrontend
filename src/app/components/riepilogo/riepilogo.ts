@@ -101,11 +101,15 @@ export class RiepilogoComponent implements OnInit {
         error: (err) => {
           if (err.status === 500 && err.error?.message?.includes('già effettuato')) {
             this.snackBar.open('Hai già effettuato una prenotazione per questo viaggio.', 'Chiudi', { duration: 3000 });
+          } else if (err.status === 410) {
+            this.snackBar.open('⏱️ Il tempo per completare la prenotazione è scaduto. Riprova da capo.', 'Chiudi', { duration: 4000 });
+            this.router.navigate(['/']); // oppure verso una pagina di riepilogo/errore
           } else {
-            this.snackBar.open('Errore durante la prenotazione.', 'Chiudi', { duration: 3000 });
+            this.snackBar.open('❌ Errore durante la prenotazione.', 'Chiudi', { duration: 3000 });
           }
           console.error('❌ Errore durante la creazione della prenotazione:', err);
         }
+
       });
   }
 }

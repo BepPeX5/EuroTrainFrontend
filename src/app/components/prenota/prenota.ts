@@ -131,7 +131,12 @@ export class PrenotaComponent implements OnInit {
         localStorage.removeItem('posti');
       },
       error: (err) => {
-        if (err.status === 500) {
+        if (err.status === 410) {
+          this.erroreConflitto = '⏱️ La prenotazione è scaduta. Devi rifare la procedura dall’inizio.';
+          localStorage.removeItem('prenotazione');
+          localStorage.removeItem('posti');
+          setTimeout(() => this.router.navigate(['/']), 3000);
+        } else if (err.status === 500) {
           this.erroreConflitto = '⚠️ Il viaggio è stato aggiornato. Riprova a fare la prenotazione.';
         } else {
           console.error('Errore aggiunta biglietti:', err);
