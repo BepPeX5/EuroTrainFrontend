@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { OnInit } from '@angular/core';
 import { Viaggio, Prenotazione } from '../../services/models';
 import { KeycloakService } from '../../services/keycloakservice';
 import { Clienteservice } from '../../services/clienteservice';
@@ -30,27 +29,12 @@ export class RiepilogoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
-    let currentIndex = 0;
-    setInterval(() => {
-      images.forEach((img) => img.classList.remove('active'));
-      currentIndex = (currentIndex + 1) % images.length;
-      images[currentIndex].classList.add('active');
-    }, 10000);
-
-    // ✅ Reinizzializza Keycloak (utile dopo "torna indietro")
-    this.keycloakService.init().then(async authenticated => {
-      if (authenticated) {
-        const profilo: Keycloak.KeycloakProfile = await this.keycloakService.keycloakInstance.loadUserInfo();
-        this.keycloakService.profile = {
-          sub: '',
-          email: profilo['email'] ?? '',
-          given_name: profilo['given_name'] ?? '',
-          family_name: profilo['family_name'] ?? '',
-          token: this.keycloakService.getToken()
-        };
-      }
-    });
+    const token = localStorage.getItem('kc_token'); // Verifica token
+    if (token) {
+      console.log('Utente già loggato, token trovato.');
+    } else {
+      console.log('Token non trovato, chiedo login.');
+    }
   }
 
   controllaPosti(): void {
@@ -64,12 +48,23 @@ export class RiepilogoComponent implements OnInit {
   async procedi(): Promise<void> {
     if (!this.viaggio || this.posti < 1 || this.errorePosti) return;
 
+    // Log dei dati prima di inviarli al backend
+    console.log('Prenotazione in procedi:', {
+      viaggio: this.viaggio,
+      posti: this.posti,
+      prezzo: this.viaggio.prezzo! * this.posti
+    });
+    console.log('Token prima del login:', localStorage.getItem('kc_token'));
+
     const prenotazione: Prenotazione = {
       viaggio: this.viaggio,
       posti: this.posti,
       prezzo: this.viaggio.prezzo! * this.posti,
       biglietti: []
     };
+
+    // Log per confermare che i dati sono stati preparati correttamente
+    console.log('Dati prenotazione preparati per invio:', prenotazione);
 
     localStorage.setItem('prenotazione', JSON.stringify(prenotazione));
     localStorage.setItem('posti', this.posti.toString());
@@ -88,8 +83,10 @@ export class RiepilogoComponent implements OnInit {
       return;
     }
 
-    // ✅ Chiamata backend
-    this.clienteService.prenota(prenotazione).subscribe({
+    // Log prima della chiamata al backend con il token
+    console.log('Token di autenticazione prima di inviare la richiesta:', this.keycloakService.getToken());
+
+    this.clienteService.prenota(this.viaggio, this.posti, this.viaggio.prezzo! * this.posti).subscribe({
       next: (creata) => {
         this.router.navigate(['/prenota'], {
           state: {
@@ -100,8 +97,12 @@ export class RiepilogoComponent implements OnInit {
       },
       error: (err) => {
         alert("Errore nella creazione della prenotazione. Riprova.");
-        console.error(err);
+        console.error('Errore durante la creazione della prenotazione:', err);
       }
     });
   }
 }
+
+
+
+

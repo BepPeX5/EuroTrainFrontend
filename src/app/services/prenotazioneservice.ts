@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Biglietto, Prenotazione, Viaggio } from './models';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Biglietto, Prenotazione, Viaggio } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +29,13 @@ export class Prenotazioneservice {
 
   // 🔐 Verifica se l'utente ha già prenotato quel viaggio
   haGiaPrenotato(viaggioId: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}/verifica`, {
-      params: { viaggioId }
-    });
+    const params = new HttpParams().set('viaggioId', viaggioId.toString());
+    return this.http.get<boolean>(`${this.baseUrl}/verifica`, { params });
   }
 
-  // ✅ Conferma la prenotazione
+  // 🔐 Conferma una prenotazione per l'utente autenticato
   confermaPrenotazione(viaggioId: number): Observable<void> {
-    const params = { viaggioId: viaggioId.toString() };
+    const params = new HttpParams().set('viaggioId', viaggioId.toString());
     return this.http.put<void>(`${this.baseUrl}/conferma`, null, { params });
   }
 
@@ -55,5 +54,6 @@ export class Prenotazioneservice {
   calcolaPrezzoTotale(prenotazione: Prenotazione): Observable<number> {
     return this.http.post<number>(`${this.baseUrl}/prezzoTotale`, prenotazione);
   }
+
 }
 

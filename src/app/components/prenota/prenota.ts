@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Prenotazione, Biglietto, Tariffa } from '../../services/models';
 import { Prenotazioneservice } from '../../services/prenotazioneservice';
+import { KeycloakService } from '../../services/keycloakservice';
 
 @Component({
   selector: 'app-prenota',
@@ -24,7 +25,8 @@ export class PrenotaComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private prenotazioneService: Prenotazioneservice
+    private prenotazioneService: Prenotazioneservice,
+    private keycloakService: KeycloakService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +104,14 @@ export class PrenotaComponent implements OnInit {
     this.erroreCampi = '';
     this.erroreConflitto = '';
 
+    const token = localStorage.getItem('kc_token');  // Verifica token
+
+    if (!token) {
+      this.keycloakService.loginUtente(); // Chiede il login se non è autenticato
+      return;
+    }
+
+    // ✅ Chiamata al servizio per aggiungere i biglietti
     this.prenotazioneService.aggiungiBiglietti(this.prenotazione, this.biglietti).subscribe({
       next: (aggiornata) => {
         this.prenotazione = aggiornata;

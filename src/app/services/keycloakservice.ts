@@ -43,8 +43,9 @@ export class KeycloakService {
       if (authenticated) {
         this.profile = await this._keycloak.loadUserInfo() as UserProfile;
         this.profile.token = this._keycloak.token || '';
+        // Salva il token nel localStorage
+        localStorage.setItem('kc_token', this._keycloak.token || '');
         console.log('🪪 Token:', this._keycloak.token);
-        console.log('🔓 Ruoli utente:', this.getUserClientRoles());
 
         const redirectPath = localStorage.getItem('redirectAfterLogin');
         if (redirectPath) {
