@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Viaggio, Prenotazione } from '../../services/models';
 import { KeycloakService } from '../../services/keycloakservice';
 import { Clienteservice } from '../../services/clienteservice';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-riepilogo',
@@ -18,10 +19,12 @@ export class RiepilogoComponent implements OnInit {
   posti: number = 1;
   errorePosti: boolean = false;
 
+
   constructor(
     private router: Router,
     private keycloakService: KeycloakService,
-    private clienteService: Clienteservice
+    private clienteService: Clienteservice,
+    private snackBar: MatSnackBar
   ) {
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as { viaggio: Viaggio };
@@ -96,7 +99,11 @@ export class RiepilogoComponent implements OnInit {
           });
         },
         error: (err) => {
-          alert("Errore nella creazione della prenotazione. Riprova.");
+          if (err.status === 500 && err.error?.message?.includes('già effettuato')) {
+            this.snackBar.open('Hai già effettuato una prenotazione per questo viaggio.', 'Chiudi', { duration: 3000 });
+          } else {
+            this.snackBar.open('Errore durante la prenotazione.', 'Chiudi', { duration: 3000 });
+          }
           console.error('❌ Errore durante la creazione della prenotazione:', err);
         }
       });
