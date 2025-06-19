@@ -8,6 +8,17 @@
   <div class="background-fade-overlay"></div>
 
   <header class="search-header">
+    <div class="user-dropdown" *ngIf="isAuthenticated">
+      <button class="user-button" (click)="toggleMenuUtente()">👤 {{ userName || 'Utente' }} ▼</button>
+
+      <!-- Menu dropdown solo se mostraMenuUtente === true -->
+      <div class="dropdown-menu" *ngIf="mostraMenuUtente">
+        <p>Benvenuto, {{ userName || 'utente' }}!</p>
+        <button (click)="vaiAllePrenotazioni()">📄 Le tue prenotazioni</button>
+        <button (click)="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
     <div class="logo-container">
       <img src="/assets/logo.png" alt="Logo" class="logo">
     </div>

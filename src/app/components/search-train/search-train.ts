@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Stazioneservice } from '../../services/stazioneservice';
 import { Viaggioservice } from '../../services/viaggioservice';
 import { Viaggio } from '../../services/models';
-import {KeycloakService} from '../../services/keycloakservice';
+import { KeycloakService, UserProfile } from '../../services/keycloakservice';
 
 
 @Component({
@@ -28,6 +28,10 @@ export class SearchComponent implements OnInit {
   isLoadingDestinazioni = false;
   isLoadingDate = false;
 
+  isAuthenticated = false;
+  userName: string = '';
+  mostraMenuUtente = false;
+
   constructor(
     private stazioneService: Stazioneservice,
     private viaggioService: Viaggioservice,
@@ -37,11 +41,17 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.startSlideshow()
+    this.startSlideshow();
+
     this.stazioneService.caricaStazioniPartenza().subscribe({
       next: (data: string[]) => this.partenze = data,
       error: (err) => console.error('Errore nel caricamento delle partenze:', err)
     });
+
+    this.isAuthenticated = this.keycloakService.hasRole('user');
+    if (this.isAuthenticated && this.keycloakService.profile) {
+      this.userName = this.keycloakService.profile.given_name;
+    }
   }
 
   onPartenzaChange(): void {
@@ -142,5 +152,16 @@ export class SearchComponent implements OnInit {
     this.keycloakService.loginAsAdmin();
   }
 
+  toggleMenuUtente(): void {
+    this.mostraMenuUtente = !this.mostraMenuUtente;
+  }
+
+  logout(): void {
+    this.keycloakService.logout();
+  }
+
+  vaiAllePrenotazioni(): void {
+    this.router.navigate(['/recup-preno-personali']);
+  }
 }
 

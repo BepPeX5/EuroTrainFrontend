@@ -87,6 +87,63 @@
   color: white;
 }
 
+.user-dropdown {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-button {
+  background-color: #f1c40f;
+  color: #0a3d62;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-button:hover {
+  background-color: #f39c12;
+}
+
+.dropdown-menu {
+  margin-top: 8px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+  color: #0a3d62;
+  font-weight: 600;
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  color: #0a3d62;
+  padding: 6px 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu button:hover {
+  background-color: #ecf0f1;
+}
+
+
 /* ---------------- BLOCCO FORM ---------------- */
 .search-box {
   flex: 1;
