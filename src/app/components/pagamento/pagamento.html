@@ -1,29 +1,83 @@
-<!-- 💳 Dati pagamento -->
-<div class="biglietto-card">
-  <h3>Pagamento</h3>
-
-  <label>Numero Carta:</label>
-  <input
-    type="text"
-    [(ngModel)]="numeroCarta"
-    (input)="formattaCarta()"
-    maxlength="19"
-    placeholder="XXXX XXXX XXXX XXXX" />
-
-  <label>Scadenza:</label>
-  <div style="display: flex; gap: 10px;">
-    <select [(ngModel)]="meseScadenza">
-      <option value="">Mese</option>
-      <option *ngFor="let m of mesi" [value]="m">{{ m }}</option>
-    </select>
-
-    <select [(ngModel)]="annoScadenza">
-      <option value="">Anno</option>
-      <option *ngFor="let a of anni" [value]="a">{{ a }}</option>
-    </select>
+<div class="prenota-background">
+  <!-- SFONDO SLIDESHOW -->
+  <div class="background-slideshow">
+    <img src="/assets/immagine1.jpeg" alt="slide 1" class="active" />
+    <img src="/assets/immagine3.png" alt="slide 2" />
   </div>
 
-  <label>CVV:</label>
-  <input type="text" [(ngModel)]="cvv" maxlength="3" />
+  <!-- OVERLAY SFUMATO -->
+  <div class="background-fade-overlay"></div>
+
+  <!-- CONTENUTO CENTRALE SCORRIBILE -->
+  <div class="prenota-container">
+    <button class="torna-btn" (click)="tornaAllaCompilazione()">← Torna alla selezione</button>
+
+    <h2>Pagamento e Riepilogo</h2>
+
+    <div *ngIf="errorePagamento" class="errore-msg">{{ errorePagamento }}</div>
+
+    <!-- RIEPILOGO VIAGGIO -->
+    <div class="biglietto-card">
+      <h3>Viaggio</h3>
+      <p><strong>Partenza:</strong> {{ prenotazione.viaggio.stazionePartenza.nome }}</p>
+      <p><strong>Destinazione:</strong> {{ prenotazione.viaggio.stazioneDestinazione.nome }}</p>
+      <p><strong>Data:</strong> {{ prenotazione.viaggio.dataPartenza }}</p>
+      <p><strong>Orario:</strong> {{ prenotazione.viaggio.orarioPartenza }}</p>
+    </div>
+
+    <!-- RIEPILOGO BIGLIETTI -->
+    <div *ngFor="let b of biglietti; let i = index" class="biglietto-card">
+      <h3>Biglietto {{ i + 1 }}</h3>
+      <p><strong>Nome:</strong> {{ b.nomePasseggero }}</p>
+      <p><strong>Cognome:</strong> {{ b.cognomePasseggero }}</p>
+      <p><strong>Data di nascita:</strong> {{ b.dataNascita }}</p>
+      <p><strong>Tariffa:</strong> {{ b.tariffa }}</p>
+      <p><strong>Prezzo:</strong> {{ b.prezzo | currency:'EUR' }}</p>
+    </div>
+
+    <!-- SEZIONE PAGAMENTO -->
+    <div class="biglietto-card">
+      <h3>Dati Pagamento</h3>
+
+      <label>Numero Carta:</label>
+      <input
+        type="text"
+        [(ngModel)]="numeroCarta"
+        (input)="formattaCarta()"
+        maxlength="19"
+        placeholder="XXXX XXXX XXXX XXXX"
+        name="numeroCarta"
+      />
+
+      <label>Scadenza:</label>
+      <div style="display: flex; gap: 10px;">
+        <select [(ngModel)]="meseScadenza" name="meseScadenza">
+          <option value="">Mese</option>
+          <option *ngFor="let m of mesi" [value]="m">{{ m }}</option>
+        </select>
+
+        <select [(ngModel)]="annoScadenza" name="annoScadenza">
+          <option value="">Anno</option>
+          <option *ngFor="let a of anni" [value]="a">{{ a }}</option>
+        </select>
+      </div>
+
+      <label>CVV:</label>
+      <input
+        type="text"
+        [(ngModel)]="cvv"
+        maxlength="3"
+        name="cvv"
+      />
+    </div>
+
+    <!-- TOTALE -->
+    <div class="riepilogo-totale">
+      <h3>Totale da pagare: {{ prezzoTotale | currency:'EUR' }}</h3>
+    </div>
+
+    <!-- PAGA ORA -->
+    <button class="prosegui-btn" (click)="confermaPagamento()">Paga ora</button>
+  </div>
 </div>
 
