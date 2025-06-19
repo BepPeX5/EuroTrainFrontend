@@ -86,6 +86,16 @@ export class KeycloakService {
   }
 
   logout(): void {
+    // Pulizia di sicurezza
+    sessionStorage.removeItem('riepilogo_reentered');
+    sessionStorage.removeItem('procedi_clicked');
+
+    localStorage.removeItem('kc_token');
+    localStorage.removeItem('prenotazione');
+    localStorage.removeItem('viaggio');
+    localStorage.removeItem('posti');
+
+    // Logout ufficiale con redirect alla home
     this._keycloak.logout({ redirectUri: `${window.location.origin}` });
   }
 

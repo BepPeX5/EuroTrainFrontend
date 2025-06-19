@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Viaggioservice } from '../../services/viaggioservice';
 import { Trenoservice } from '../../services/trenoservice';
 import { Stazioneservice } from '../../services/stazioneservice';
-import { Stazione, Treno, Viaggio } from '../../services/models';
+import { Viaggio, Stazione, Treno } from '../../services/models';
 
 @Component({
   standalone: true,
@@ -27,7 +27,6 @@ export class AdminTrainsComponent implements OnInit {
     private viaggioService: Viaggioservice,
     private trenoService: Trenoservice,
     private stazioneService: Stazioneservice
-
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +34,6 @@ export class AdminTrainsComponent implements OnInit {
     this.caricaCodiciTreno();
     this.caricaStazioni();
 
-    // Slideshow automatico (effetto dissolvenza tra immagini)
     const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
     let currentIndex = 0;
     setInterval(() => {
@@ -62,7 +60,9 @@ export class AdminTrainsComponent implements OnInit {
   }
 
   salvaNuovoViaggio(): void {
-    if (!this.codiciTrenoDisponibili.includes(this.nuovoViaggio.treno.codice)) {
+    const codice = this.nuovoViaggio.treno.codice;
+
+    if (!this.codiciTrenoDisponibili.includes(codice)) {
       alert('⚠️ Codice treno non valido.');
       return;
     }
@@ -77,10 +77,21 @@ export class AdminTrainsComponent implements OnInit {
       return;
     }
 
-    this.viaggioService.creaViaggio(this.nuovoViaggio).subscribe(() => {
-      this.nuovoViaggio = this.emptyViaggio();
-      this.caricaViaggi();
-      this.showSuccessMessage('✅ Viaggio aggiunto con successo.');
+    // 🔸 Recupera il treno completo con capienza corretta
+    this.trenoService.getTrenoByCodice(codice).subscribe(treno => {
+      if (!treno) {
+        alert('❌ Treno non trovato.');
+        return;
+      }
+
+      this.nuovoViaggio.treno = treno;
+      this.nuovoViaggio.disponibilitaPosti = treno.capienza;
+
+      this.viaggioService.creaViaggio(this.nuovoViaggio).subscribe(() => {
+        this.nuovoViaggio = this.emptyViaggio();
+        this.caricaViaggi();
+        this.showSuccessMessage('✅ Viaggio aggiunto con successo.');
+      });
     });
   }
 
@@ -112,7 +123,7 @@ export class AdminTrainsComponent implements OnInit {
   generaViaggi(): void {
     this.viaggioService.generaViaggi(this.numeroDaGenerare).subscribe(() => {
       this.caricaViaggi();
-      this.showSuccessMessage('✅ ' + this.numeroDaGenerare + ' Viaggi generati casualmente con successo.');
+      this.showSuccessMessage(`✅ ${this.numeroDaGenerare} Viaggi generati casualmente con successo.`);
     });
   }
 
@@ -128,7 +139,7 @@ export class AdminTrainsComponent implements OnInit {
   }
 
   formatOrario(ora: string): string {
-    return ora?.substring(0, 5); // HH:mm
+    return ora?.substring(0, 5);
   }
 
   emptyViaggio(): Viaggio {
