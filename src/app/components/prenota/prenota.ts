@@ -22,6 +22,7 @@ export class PrenotaComponent implements OnInit {
   erroreConflitto: string = '';
   mostraRiepilogo: boolean = false;
   prezzoTotale: number = 0;
+  oggi: string = '';
 
   constructor(
     private router: Router,
@@ -31,6 +32,7 @@ export class PrenotaComponent implements OnInit {
 
   ngOnInit(): void {
     const state = history.state as { prenotazione: Prenotazione, posti: number };
+    this.oggi = new Date().toISOString().split('T')[0];
 
     if (state?.prenotazione && state?.posti) {
       this.prenotazione = state.prenotazione;
@@ -104,19 +106,26 @@ export class PrenotaComponent implements OnInit {
     this.erroreCampi = '';
     this.erroreConflitto = '';
 
-    const token = localStorage.getItem('kc_token');  // Verifica token
+    const token = localStorage.getItem('kc_token');
 
     if (!token) {
-      this.keycloakService.loginUtente(); // Chiede il login se non è autenticato
+      this.keycloakService.loginUtente();
       return;
     }
 
-    // ✅ Chiamata al servizio per aggiungere i biglietti
+    // 🔐 Comunica con il backend passando il DTO corretto
     this.prenotazioneService.aggiungiBiglietti(this.prenotazione, this.biglietti).subscribe({
-      next: (aggiornata) => {
-        this.prenotazione = aggiornata;
+      next: (aggiornataPrenotazione) => {
+        this.prenotazione = aggiornataPrenotazione;
         this.calcolaPrezzoTotale();
         this.mostraRiepilogo = true;
+
+        // ✅ Naviga alla schermata di pagamento passando la prenotazione aggiornata
+        this.router.navigate(['/pagamento'], {
+          state: {
+            prenotazione: aggiornataPrenotazione
+          }
+        });
 
         localStorage.removeItem('prenotazione');
         localStorage.removeItem('posti');
@@ -126,10 +135,12 @@ export class PrenotaComponent implements OnInit {
           this.erroreConflitto = '⚠️ Il viaggio è stato aggiornato. Riprova a fare la prenotazione.';
         } else {
           console.error('Errore aggiunta biglietti:', err);
+          this.erroreConflitto = '❌ Errore sconosciuto durante l’aggiunta dei biglietti.';
         }
       }
     });
   }
+
 
   calcolaPrezzoTotale(): void {
     this.prenotazioneService.calcolaPrezzoTotale(this.prenotazione!).subscribe({
@@ -157,5 +168,3 @@ export class PrenotaComponent implements OnInit {
     this.router.navigate(['/riepilogo']);
   }
 }
-
-

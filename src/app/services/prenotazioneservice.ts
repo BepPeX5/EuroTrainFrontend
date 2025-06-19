@@ -39,11 +39,16 @@ export class Prenotazioneservice {
     return this.http.put<void>(`${this.baseUrl}/conferma`, null, { params });
   }
 
-  // 🔐 Aggiunge biglietti a una prenotazione
+  // ✅ Corretto per comunicare con il DTO AggiuntaBiglietto
   aggiungiBiglietti(prenotazione: Prenotazione, biglietti: Biglietto[]): Observable<Prenotazione> {
-    const body = { prenotazione, biglietti };
+    const body = {
+      prenotazione: prenotazione,
+      biglietti: biglietti
+    };
+
     return this.http.post<Prenotazione>(`${this.baseUrl}/aggiungi`, body);
   }
+
 
   // 🔐 Restituisce lista dei biglietti associati
   getListaBiglietti(prenotazione: Prenotazione): Observable<Biglietto[]> {

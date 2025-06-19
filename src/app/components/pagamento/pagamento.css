@@ -1,3 +1,4 @@
+/* Struttura base identica a prenota */
 .prenota-background {
   position: relative;
   min-height: 100vh;
@@ -67,11 +68,31 @@ h2 {
 }
 
 .biglietto-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   margin-bottom: 20px;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-left: 5px solid #f1c40f;
+  transition: background 0.3s;
+}
+
+.biglietto-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.biglietto-card h3 {
+  color: #f39c12;
+  margin-bottom: 12px;
+}
+
+.biglietto-card p {
+  margin: 6px 0;
+  font-size: 16px;
+}
+
+.biglietto-card p strong {
+  color: #f1c40f;
 }
 
 .biglietto-card label {
@@ -81,20 +102,13 @@ h2 {
   color: #f1c40f;
 }
 
-.biglietto-card input,
-.biglietto-card select {
+.biglietto-card input {
   width: 100%;
   padding: 8px;
   margin-top: 4px;
   border-radius: 8px;
   border: none;
   font-size: 16px;
-}
-
-.prezzo-biglietto {
-  margin-top: 12px;
-  font-weight: bold;
-  color: white;
 }
 
 .prosegui-btn {

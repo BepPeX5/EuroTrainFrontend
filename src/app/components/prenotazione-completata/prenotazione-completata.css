@@ -1,0 +1,46 @@
+@import url('../prenota/prenota.css');
+
+.success-message {
+  text-align: center;
+  padding: 50px 30px;
+}
+
+.success-message h2 {
+  font-size: 34px;
+  color: #2ecc71;
+  margin-bottom: 15px;
+}
+
+.success-message p {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* ✅ Bottoni in stile giallo come da richiesta */
+.button-group button {
+  padding: 14px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: #0a3d62;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  width: 80%;
+  max-width: 300px;
+}
+
+.button-group button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}

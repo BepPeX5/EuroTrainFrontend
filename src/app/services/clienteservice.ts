@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Prenotazione, Viaggio } from './models';
 import { Observable } from 'rxjs';
 
@@ -12,18 +12,18 @@ export class Clienteservice {
 
   constructor(private http: HttpClient) {}
 
-  // Aggiungi il parametro 'authentication'
   prenota(viaggio: Viaggio, posti: number, prezzo: number): Observable<Prenotazione> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('kc_token') || ''}`
-    });
+    const params = new HttpParams()
+      .set('posti', posti.toString())
+      .set('prezzo', prezzo.toString());
 
     return this.http.post<Prenotazione>(
       `${this.baseUrl}/prenota`,
-      { viaggio, posti, prezzo },  // Passiamo viaggio, posti, prezzo
-      { headers }
+      viaggio,
+      { params }
     );
   }
+
 }
 
 

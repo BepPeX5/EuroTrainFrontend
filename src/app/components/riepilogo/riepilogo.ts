@@ -29,12 +29,20 @@ export class RiepilogoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('kc_token'); // Verifica token
+    const token = localStorage.getItem('kc_token');
     if (token) {
       console.log('Utente già loggato, token trovato.');
     } else {
       console.log('Token non trovato, chiedo login.');
     }
+
+    const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
+    let currentIndex = 0;
+    setInterval(() => {
+      images.forEach((img) => img.classList.remove('active'));
+      currentIndex = (currentIndex + 1) % images.length;
+      images[currentIndex].classList.add('active');
+    }, 10000);
   }
 
   controllaPosti(): void {
@@ -48,25 +56,13 @@ export class RiepilogoComponent implements OnInit {
   async procedi(): Promise<void> {
     if (!this.viaggio || this.posti < 1 || this.errorePosti) return;
 
-    // Log dei dati prima di inviarli al backend
-    console.log('Prenotazione in procedi:', {
+    const prezzoTotale = this.viaggio.prezzo!;
+
+    localStorage.setItem('prenotazione', JSON.stringify({
       viaggio: this.viaggio,
       posti: this.posti,
-      prezzo: this.viaggio.prezzo! * this.posti
-    });
-    console.log('Token prima del login:', localStorage.getItem('kc_token'));
-
-    const prenotazione: Prenotazione = {
-      viaggio: this.viaggio,
-      posti: this.posti,
-      prezzo: this.viaggio.prezzo! * this.posti,
-      biglietti: []
-    };
-
-    // Log per confermare che i dati sono stati preparati correttamente
-    console.log('Dati prenotazione preparati per invio:', prenotazione);
-
-    localStorage.setItem('prenotazione', JSON.stringify(prenotazione));
+      prezzo: prezzoTotale
+    }));
     localStorage.setItem('posti', this.posti.toString());
     localStorage.setItem('viaggio', JSON.stringify(this.viaggio));
     localStorage.setItem('redirectAfterLogin', '/prenota');
@@ -83,26 +79,23 @@ export class RiepilogoComponent implements OnInit {
       return;
     }
 
-    // Log prima della chiamata al backend con il token
-    console.log('Token di autenticazione prima di inviare la richiesta:', this.keycloakService.getToken());
-
-    this.clienteService.prenota(this.viaggio, this.posti, this.viaggio.prezzo! * this.posti).subscribe({
-      next: (creata) => {
-        this.router.navigate(['/prenota'], {
-          state: {
-            prenotazione: creata,
-            posti: this.posti
-          }
-        });
-      },
-      error: (err) => {
-        alert("Errore nella creazione della prenotazione. Riprova.");
-        console.error('Errore durante la creazione della prenotazione:', err);
-      }
-    });
+    // ✅ Chiamata corretta con parametri backend: viaggio nel body, posti/prezzo nei query param
+    this.clienteService
+      .prenota(this.viaggio, this.posti, prezzoTotale)
+      .subscribe({
+        next: (creata) => {
+          this.router.navigate(['/prenota'], {
+            state: {
+              prenotazione: creata,
+              posti: this.posti
+            }
+          });
+        },
+        error: (err) => {
+          alert("Errore nella creazione della prenotazione. Riprova.");
+          console.error('Errore durante la creazione della prenotazione:', err);
+        }
+      });
   }
 }
-
-
-
 
