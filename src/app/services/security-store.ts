@@ -5,7 +5,7 @@ import {
   PLATFORM_ID,
   signal,
 } from '@angular/core';
-import { KeycloakService } from './keycloakservice'; // ✅ tuo servizio attuale
+import { KeycloakService } from './keycloakservice';
 import { isPlatformServer } from '@angular/common';
 
 export interface User {
@@ -31,7 +31,7 @@ export class SecurityStore {
   loaded = signal(false);
   user = signal<User | undefined>(undefined);
 
-  // 👇🏻 per usare facilmente nei componenti
+
   loadedUser = computed(() => (this.loaded() ? this.user() : undefined));
   signedIn = computed(() => this.loaded() && !this.user()?.anonymous);
 

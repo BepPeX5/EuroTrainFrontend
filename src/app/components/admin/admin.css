@@ -1,4 +1,4 @@
-/* ---------- CONTAINER PRINCIPALE ---------- */
+
 .admin-page-container {
   position: relative;
   min-height: 100vh;
@@ -11,7 +11,7 @@
 }
 
 
-/* ---------- SFONDO SLIDESHOW ---------- */
+
 .background-slideshow {
   position: absolute;
   top: 0;
@@ -31,7 +31,7 @@
   object-fit: cover;
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
-  filter: brightness(0.6) blur(3px); /* 👈 sfocatura elegante */
+  filter: brightness(0.6) blur(3px);
 }
 
 .background-slideshow img.active {
@@ -39,7 +39,7 @@
   z-index: 1;
 }
 
-/* ---------- GRADIENTE OVERLAY ---------- */
+
 .background-fade-overlay {
   position: absolute;
   top: 0;
@@ -52,7 +52,7 @@
   backdrop-filter: blur(4px);
 }
 
-/* ---------- CONTENUTO CENTRALE ---------- */
+
 .admin-dashboard {
   position: relative;
   z-index: 2;

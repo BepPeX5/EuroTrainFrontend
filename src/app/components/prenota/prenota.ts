@@ -113,14 +113,14 @@ export class PrenotaComponent implements OnInit {
       return;
     }
 
-    // 🔐 Comunica con il backend passando il DTO corretto
+
     this.prenotazioneService.aggiungiBiglietti(this.prenotazione, this.biglietti).subscribe({
       next: (aggiornataPrenotazione) => {
         this.prenotazione = aggiornataPrenotazione;
         this.calcolaPrezzoTotale();
         this.mostraRiepilogo = true;
 
-        // ✅ Naviga alla schermata di pagamento passando la prenotazione aggiornata
+
         this.router.navigate(['/pagamento'], {
           state: {
             prenotazione: aggiornataPrenotazione

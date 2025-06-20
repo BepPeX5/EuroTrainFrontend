@@ -1,15 +1,15 @@
 <div class="admin-trains-page">
 
-  <!-- 🎞️ SFONDO SLIDESHOW -->
+
   <div class="background-slideshow">
     <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
     <img src="/assets/immagine3.png" alt="slide 2">
   </div>
 
-  <!-- ✨ SFUMATURA -->
+
   <div class="background-fade-overlay"></div>
 
-  <!-- 📦 CONTENUTO -->
+
   <div class="admin-trains">
 
     <h2>🚄 Gestione Viaggi</h2>
@@ -22,20 +22,20 @@
       <button (click)="aggiornaDB()">🔄 Aggiorna DB</button>
     </div>
 
-    <!-- ✅ MESSAGGIO OPERAZIONE -->
+
     <div *ngIf="messaggioOperazione" class="messaggio-successo">
       {{ messaggioOperazione }}
     </div>
 
     <form class="nuovo-form" (ngSubmit)="modificaId ? confermaModifica() : salvaNuovoViaggio()">
 
-      <!-- 🔽 SELECT STAZIONE PARTENZA -->
+
       <select [(ngModel)]="nuovoViaggio.stazionePartenza.nome" name="partenza" required>
         <option value="" disabled selected>Stazione di Partenza</option>
         <option *ngFor="let s of stazioniDisponibili" [value]="s">{{ s }}</option>
       </select>
 
-      <!-- 🔽 SELECT STAZIONE DESTINAZIONE -->
+
       <select [(ngModel)]="nuovoViaggio.stazioneDestinazione.nome" name="destinazione" required>
         <option value="" disabled selected>Stazione di Destinazione</option>
         <option *ngFor="let s of stazioniDisponibili" [value]="s">{{ s }}</option>
@@ -44,7 +44,7 @@
       <input placeholder="Data" type="date" [(ngModel)]="nuovoViaggio.dataPartenza" name="data" [min]="oggi" required />
       <input placeholder="Ora" type="time" [(ngModel)]="nuovoViaggio.orarioPartenza" name="ora" required />
 
-      <!-- 🔽 SELECT CODICE TRENO -->
+
       <select [(ngModel)]="nuovoViaggio.treno.codice" name="treno" required>
         <option value="" disabled selected>Seleziona Codice Treno</option>
         <option *ngFor="let codice of codiciTrenoDisponibili" [value]="codice">{{ codice }}</option>

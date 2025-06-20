@@ -12,34 +12,34 @@ export class Prenotazioneservice {
 
   constructor(private http: HttpClient) {}
 
-  // 🔐 Admin: recupera tutte le prenotazioni
+
   getTutteLePrenotazioni(): Observable<Prenotazione[]> {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/prenotazioniComplete`);
   }
 
-  // 🔐 Utente autenticato: recupera solo le sue prenotazioni
+
   getPrenotazioniPersonali(): Observable<Prenotazione[]> {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/mie`);
   }
 
-  // 🔓 Recupera le prenotazioni per un dato viaggio
+
   getPrenotazioniPerViaggio(viaggioId: number): Observable<Prenotazione[]> {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/viaggio/${viaggioId}`);
   }
 
-  // 🔐 Verifica se l'utente ha già prenotato quel viaggio
+
   haGiaPrenotato(viaggioId: number): Observable<boolean> {
     const params = new HttpParams().set('viaggioId', viaggioId.toString());
     return this.http.get<boolean>(`${this.baseUrl}/verifica`, { params });
   }
 
-  // 🔐 Conferma una prenotazione per l'utente autenticato
+
   confermaPrenotazione(viaggioId: number): Observable<void> {
     const params = new HttpParams().set('viaggioId', viaggioId.toString());
     return this.http.put<void>(`${this.baseUrl}/conferma`, null, { params });
   }
 
-  // ✅ Corretto per comunicare con il DTO AggiuntaBiglietto
+
   aggiungiBiglietti(prenotazione: Prenotazione, biglietti: Biglietto[]): Observable<Prenotazione> {
     const body = {
       prenotazione: prenotazione,
@@ -50,12 +50,12 @@ export class Prenotazioneservice {
   }
 
 
-  // 🔐 Restituisce lista dei biglietti associati
+
   getListaBiglietti(prenotazione: Prenotazione): Observable<Biglietto[]> {
     return this.http.post<Biglietto[]>(`${this.baseUrl}/listaBiglietti`, prenotazione);
   }
 
-  // 🔐 Calcola il prezzo totale della prenotazione
+
   calcolaPrezzoTotale(prenotazione: Prenotazione): Observable<number> {
     return this.http.post<number>(`${this.baseUrl}/prezzoTotale`, prenotazione);
   }

@@ -56,7 +56,7 @@ export interface Prenotazione {
   confermata?: boolean;
 }
 
-// biglietto.model.ts
+
 export interface Biglietto {
   stazionePartenza: string;
   stazioneArrivo: string;

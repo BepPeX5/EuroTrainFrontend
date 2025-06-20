@@ -21,7 +21,7 @@ export class AdminBookingsComponent implements OnInit {
   ngOnInit(): void {
     this.caricaPrenotazioni();
 
-    // Slideshow automatico (effetto dissolvenza tra immagini)
+
     const images = document.querySelectorAll<HTMLImageElement>('.background-slideshow img');
     let currentIndex = 0;
     setInterval(() => {

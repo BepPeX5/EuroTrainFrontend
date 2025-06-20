@@ -1,4 +1,4 @@
-/* ---------------- SFONDO SLIDESHOW NATIVO ---------------- */
+
 .background-slideshow {
   position: absolute;
   top: 0;
@@ -29,7 +29,7 @@
   z-index: 1;
 }
 
-/* ✅ Questo overlay fa l'effetto dissolvenza */
+
 .background-fade-overlay {
   position: absolute;
   top: 0;
@@ -42,7 +42,7 @@
 }
 
 
-/* ---------------- CONTAINER PRINCIPALE ---------------- */
+
 .app-search-train-container {
   min-height: 100vh;
   display: flex;
@@ -53,7 +53,7 @@
   background-color: #0a3d62;
 }
 
-/* ---------------- HEADER LOGO ---------------- */
+
 .search-header {
   background-color: rgba(0, 0, 0, 0.6);
   padding: 16px 40px;
@@ -144,7 +144,7 @@
 }
 
 
-/* ---------------- BLOCCO FORM ---------------- */
+
 .search-box {
   flex: 1;
   display: flex;
@@ -153,7 +153,7 @@
   justify-content: center;
   padding: 60px 40px 60px 0;
   z-index: 2;
-  transform: translateX(-5vw); /* Sposta leggermente verso il centro */
+  transform: translateX(-5vw);
 }
 
 .search-box > div {
@@ -203,7 +203,7 @@
   transform: scale(1.01);
 }
 
-/* ---------------- BOTTONE CERCA ---------------- */
+
 .search-button {
   width: 100%;
   max-width: 540px;

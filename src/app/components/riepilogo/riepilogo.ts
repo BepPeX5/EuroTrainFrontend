@@ -40,7 +40,7 @@ export class RiepilogoComponent implements OnInit {
       images[currentIndex].classList.add('active');
     }, 10000);
 
-    // ✅ Dopo il login, riesegui procedi solo 1 volta
+
     const token = localStorage.getItem('kc_token');
     const isFirstLoad = !sessionStorage.getItem('riepilogo_reentered');
     if (token && isFirstLoad) {
@@ -74,7 +74,7 @@ export class RiepilogoComponent implements OnInit {
     const isAuthenticated = await this.keycloakService.init();
 
     if (!isAuthenticated) {
-      sessionStorage.removeItem('riepilogo_reentered'); // assicura che venga rieseguito
+      sessionStorage.removeItem('riepilogo_reentered');
       this.keycloakService.loginUtente({
         redirectUri: `${window.location.origin}/riepilogo`
       });

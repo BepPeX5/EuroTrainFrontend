@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common'; // ✅ Importa CommonModule
   selector: 'app-admin',
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
-  imports: [CommonModule] // ✅ Aggiungi qui CommonModule per usare *ngIf, *ngFor, ecc.
+  imports: [CommonModule]
 })
 export class AdminComponent implements OnInit {
   nomeUtente: string = '';

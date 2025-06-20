@@ -1,4 +1,4 @@
-/* 🌌 SFONDO E SLIDESHOW */
+
 .admin-trains-page {
   position: relative;
   min-height: 100vh;
@@ -47,7 +47,7 @@
 }
 
 
-/* 📦 CONTENUTO PRINCIPALE */
+
 .admin-trains {
   position: relative;
   z-index: 2;
@@ -65,7 +65,7 @@
   gap: 30px;
 }
 
-/* 🎯 TITOLO */
+
 .admin-trains h2 {
   font-size: 36px;
   text-align: center;
@@ -73,7 +73,7 @@
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
 }
 
-/* 📊 TABELLA */
+
 .table-wrapper {
   max-height: 500px;
   overflow-y: auto;
@@ -125,7 +125,7 @@ td button:hover {
   background: linear-gradient(135deg, #2980b9, #2471a3);
 }
 
-/* 📄 SOTTO-TABELLA DETTAGLI */
+
 .sottotabella {
   width: 100%;
   margin-top: 10px;

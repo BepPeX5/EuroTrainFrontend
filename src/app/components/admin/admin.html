@@ -1,21 +1,21 @@
 <div class="admin-page-container">
 
-  <!-- 🔒 HEADER TOP-RIGHT CON WELCOME E LOGOUT -->
+
   <div class="header-welcome" *ngIf="isLoggedIn">
     <span class="welcome-text">Welcome, {{ nomeUtente }}</span>
     <button (click)="logout()">Logout</button>
   </div>
 
-  <!-- 🎞️ SLIDESHOW SFONDO -->
+
   <div class="background-slideshow">
     <img src="/assets/immagine1.jpeg" alt="slide 1" class="active">
     <img src="/assets/immagine3.png" alt="slide 2">
   </div>
 
-  <!-- ✨ EFFETTO GRADIENTE + SFUMATURA -->
+
   <div class="background-fade-overlay"></div>
 
-  <!-- 📦 CONTENUTO AREA ADMIN -->
+
   <div class="admin-dashboard">
     <h1>Area Amministratore</h1>
     <p>Scegli una sezione da gestire:</p>

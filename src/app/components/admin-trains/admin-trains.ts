@@ -77,7 +77,7 @@ export class AdminTrainsComponent implements OnInit {
       return;
     }
 
-    // 🔸 Recupera il treno completo con capienza corretta
+
     this.trenoService.getTrenoByCodice(codice).subscribe(treno => {
       if (!treno) {
         alert('❌ Treno non trovato.');

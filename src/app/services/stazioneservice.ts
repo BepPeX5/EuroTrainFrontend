@@ -15,14 +15,14 @@ export class Stazioneservice {
     return this.http.get<string[]>(`${this.baseUrl}/partenze`);
   }
 
-  // Chiamata a GET /api/stazioni/destinazioni?stazionePartenza=...
+
   caricaDestinazioniFromPartenza(partenza: string): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/destinazioni`, {
       params: { stazionePartenza: partenza }
     });
   }
 
-  // Chiamata a GET /api/stazioni/partenza?stazionePartenza=...&stazioneDestinazione=...
+
   caricaDateDisponibili(partenza: string, destinazione: string): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/partenza`, {
       params: {

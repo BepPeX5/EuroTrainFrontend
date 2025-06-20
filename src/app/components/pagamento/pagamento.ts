@@ -46,7 +46,7 @@ export class PagamentoComponent implements OnInit {
       this.router.navigate(['/']);
     }
 
-    // Popola anni da quello attuale ai prossimi 10
+
     const annoCorrente = new Date().getFullYear();
     for (let i = 0; i < 10; i++) {
       this.anni.push((annoCorrente + i).toString());

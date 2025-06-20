@@ -1,14 +1,14 @@
 <div class="prenota-background">
-  <!-- SFONDO SLIDESHOW -->
+
   <div class="background-slideshow">
     <img src="/assets/immagine1.jpeg" alt="slide 1" class="active" />
     <img src="/assets/immagine3.png" alt="slide 2" />
   </div>
 
-  <!-- OVERLAY SFUMATO -->
+
   <div class="background-fade-overlay"></div>
 
-  <!-- CONTENUTO CENTRALE SCORRIBILE -->
+
   <div class="prenota-container">
     <button class="torna-btn" (click)="tornaAllaCompilazione()">← Torna alla selezione</button>
 
@@ -16,7 +16,7 @@
 
     <div *ngIf="errorePagamento" class="errore-msg">{{ errorePagamento }}</div>
 
-    <!-- RIEPILOGO VIAGGIO -->
+
     <div class="biglietto-card">
       <h3>Viaggio</h3>
       <p><strong>Partenza:</strong> {{ prenotazione.viaggio.stazionePartenza.nome }}</p>
@@ -25,7 +25,7 @@
       <p><strong>Orario:</strong> {{ prenotazione.viaggio.orarioPartenza }}</p>
     </div>
 
-    <!-- RIEPILOGO BIGLIETTI -->
+
     <div *ngFor="let b of biglietti; let i = index" class="biglietto-card">
       <h3>Biglietto {{ i + 1 }}</h3>
       <p><strong>Nome:</strong> {{ b.nomePasseggero }}</p>
@@ -35,7 +35,7 @@
       <p><strong>Prezzo:</strong> {{ b.prezzo | currency:'EUR' }}</p>
     </div>
 
-    <!-- SEZIONE PAGAMENTO -->
+
     <div class="biglietto-card">
       <h3>Dati Pagamento</h3>
 
@@ -71,12 +71,12 @@
       />
     </div>
 
-    <!-- TOTALE -->
+
     <div class="riepilogo-totale">
       <h3>Totale da pagare: {{ prezzoTotale | currency:'EUR' }}</h3>
     </div>
 
-    <!-- PAGA ORA -->
+
     <button class="prosegui-btn" (click)="confermaPagamento()">Paga ora</button>
   </div>
 </div>

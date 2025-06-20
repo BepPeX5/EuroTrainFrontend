@@ -11,12 +11,12 @@ export class Trenoservice {
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 GET /api/treni/codici
+
   getAllCodiciTreno(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/codici`);
   }
 
-  // 🔹 GET /api/treni/{codice}
+
   getTrenoByCodice(codice: string): Observable<Treno> {
     return this.http.get<Treno>(`${this.baseUrl}/${codice}`);
   }

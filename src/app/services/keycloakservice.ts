@@ -95,7 +95,7 @@ export class KeycloakService {
     localStorage.removeItem('viaggio');
     localStorage.removeItem('posti');
 
-    // Logout ufficiale con redirect alla home
+
     this._keycloak.logout({ redirectUri: `${window.location.origin}` });
   }
 

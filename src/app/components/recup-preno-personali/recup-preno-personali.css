@@ -1,4 +1,4 @@
-@import url('../admin-bookings/admin-bookings.css'); /* Se hai già uno stile globale */
+@import url('../admin-bookings/admin-bookings.css');
 
 .admin-trains-page {
   position: relative;
